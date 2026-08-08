@@ -21,3 +21,7 @@ npm-debug.log*
 # OS files
 .DS_Store
 Thumbs.db
+
+# Large binary assets (not needed in repo)
+public/pdf_assets/
+public/pdfs/
