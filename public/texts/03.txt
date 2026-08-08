@@ -1,0 +1,44 @@
+03
+Đọc sự thay đổi
+Phân biệt liquidity grab, displacement, MSS và CISD trước khi tìm entry.
+
+-Market Structure Shift - Market_Structure_Shift.pdf
+Giải thích displacement và việc phá swing structure bằng body close để xác nhận Market Structure Shift.
+
+Điểm cần nhớ
+Displacement là chuyển động mạnh với full-bodied candles và thường để lại FVG.
+MSS ưu tiên body close qua swing high/low thay vì chỉ wick.
+Stop raid và HTF level trước MSS làm bối cảnh đáng tin hơn.
+Bài tập thực hành
+Phân loại 20 lần phá swing: displacement MSS hay chỉ wick/liquidity grab.
+Mở PDF toàn màn hình
+
+- Change in State of Delivery - CISD.pdf
+Tài liệu hình ảnh về việc delivery đổi trạng thái tại một important level.
+
+Điểm cần nhớ
+CISD tập trung vào thay đổi cách price được giao hơn là chỉ phá swing.
+Important level là phần bối cảnh bắt buộc.
+Nên dùng CISD cùng liquidity raid hoặc HTF PD array.
+Bài tập thực hành
+Đánh dấu candle sequence trước và sau khi delivery đổi hướng tại một HTF level.
+
+- MSS vs CISD - MSS_vs_CISD.pdf 
+So sánh trực quan giữa Market Structure Shift và Change in State of Delivery, kèm liên hệ inversion.
+
+Điểm cần nhớ
+MSS xác nhận qua displacement phá structure.
+CISD có thể xuất hiện sớm hơn qua thay đổi delivery.
+Không nên coi hai khái niệm là hoàn toàn giống nhau.
+Bài tập thực hành
+Trên cùng một reversal, đánh dấu thời điểm CISD xuất hiện và thời điểm MSS được xác nhận.
+
+- MSS vs Liquidity Grab - MSS_vs_Liquidity_Grab.pdf
+Phân biệt phá structure có displacement với cú quét thanh khoản thiếu displacement.
+
+Điểm cần nhớ
+MSS ưu tiên displacement và body close qua structure.
+Liquidity grab thường fail to displace và không giữ được phía ngoài high/low.
+Liquidity grab có thể báo hiệu failure to continue.
+Bài tập thực hành
+Replay NY Open và chụp riêng ví dụ MSS thật cùng ví dụ liquidity grab.

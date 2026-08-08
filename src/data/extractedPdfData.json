@@ -1,0 +1,1315 @@
+{
+  "Discount__Premium.pdf": {
+    "file": "Discount__Premium.pdf",
+    "slug": "discount__premium",
+    "total_pages": 8,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/discount__premium/page_1.png",
+        "text": "DISCOUNT & PREMIUM"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/discount__premium/page_2.png",
+        "text": "Discount & Premium\n1\nRange High & Low\n2\nDiscount & Premium\n3\nWhy?\n4\nPremium PD Array\n5\nDiscount PD Array"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/discount__premium/page_3.png",
+        "text": "1\nRange High & Low\nDiscount and premium is based off the \nrange high to the range low.\nAn easy way to view a range is to look for \nwhere sell side and buyside liquidity is \nresting. \nLiquidity PDF\n \nBuyside Liquidity  \nSellside Liquidity"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/discount__premium/page_4.png",
+        "text": "2\nDiscount & Premium\nA Gann Box or Fibonacci can be used from \nthe high to the low, marking out the middle \nof the range, or 0.5.\nThe top 50% or above the 0.5 is considered \na premium.\nThe bottom 50% or below the 0.5 is \nconsidered a discount.\n \n0.5"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/discount__premium/page_5.png",
+        "text": "3\nWhy?\nShort positions in premium give better \nreward to risk than a short at equilibrium \n(0.5) or a short in discount. \n \n0.5\n \nRR>1\n \nRR=1\n \nRR<1\n \nPremium \nEquilibrium\nDiscount\nShort\n \nEntry: \n0.5\n \nLong positions in discount give better \nreward to risk than a long at equilibrium \n(0.5) or a long in premium. \n \nRR>1\n \nRR=1\n \nRR<1\n \nLong\n \nPremium \nDiscount\nEquilibrium\nEntry:"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/discount__premium/page_6.png",
+        "text": "4\nPremium PD Array\n0.5\n \nPremium arrays, or PD arrays in a premium \nare used to frame a short setup. \nOB"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/discount__premium/page_7.png",
+        "text": "5\nDiscount PD Array\n0.5\n \nDiscount arrays, or PD arrays in a discount \nare used to frame a long setup. \nFVG"
+      },
+      {
+        "page_number": 8,
+        "image_url": "/pdf_assets/discount__premium/page_8.png",
+        "text": "Resources\nDiscount & Premium Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "Important_Liquidity_Levels.pdf": {
+    "file": "Important_Liquidity_Levels.pdf",
+    "slug": "important_liquidity_levels",
+    "total_pages": 10,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/important_liquidity_levels/page_1.png",
+        "text": "IMPORTANT LIQUIDITY\nLEVELS"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/important_liquidity_levels/page_2.png",
+        "text": "Important Liquidity\n1\nCandles \n2\nMonthly \n3\nWeekly\n4\nDaily \n5\nKillzones\n6\nSessions"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/important_liquidity_levels/page_3.png",
+        "text": "1\nCandles\nConsolidation\nOne Side\nBoth Sides"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/important_liquidity_levels/page_4.png",
+        "text": "2\nMonthly\nPrevious Month Low\nPrevious Month High\nWeekly Timeframe\nPrevious Month Low\nPrevious Month High\nWeekly Timeframe"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/important_liquidity_levels/page_5.png",
+        "text": "3\nWeekly\nPrevious Weeks Low\nPrevious Weeks High\nDaily Timeframe\nPrevious Weeks Low\nPrevious Weeks High\nDaily Timeframe"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/important_liquidity_levels/page_6.png",
+        "text": "4\nDaily\nPrevious Day Low\nPrevious Day High\n4 Hour Timeframe\nPrevious Day Low\nPrevious Day High\n4 Hour Timeframe"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/important_liquidity_levels/page_7.png",
+        "text": "5\nKillzones\nAsia: 20:00 – 00:00\nLondon: 02:00 – 05:00\nNew York AM: 08:30 – 11:00\nNew York PM: 13:30 – 16:00\nIndices Killzones:\n20:00 – 00:00\n02:00 – 05:00\n08:30 – 11:00\n13:30 – 16:00\nEastern Standard Time (EST)"
+      },
+      {
+        "page_number": 8,
+        "image_url": "/pdf_assets/important_liquidity_levels/page_8.png",
+        "text": "6\nSessions\nEastern Standard Time (EST)\nAsian Session High\nAsian Session Low\nLondon Session Low\nLondon Session High"
+      },
+      {
+        "page_number": 9,
+        "image_url": "/pdf_assets/important_liquidity_levels/page_9.png",
+        "text": "7\nSessions\nEastern Standard Time (EST)\nAsian Session High\nAsian Session Low\nLondon Session Low\nLondon Session High"
+      },
+      {
+        "page_number": 10,
+        "image_url": "/pdf_assets/important_liquidity_levels/page_10.png",
+        "text": "Resources\nImportant Liquidity Levels\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "IRL-ERL.pdf": {
+    "file": "IRL-ERL.pdf",
+    "slug": "irl_erl",
+    "total_pages": 11,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/irl_erl/page_1.png",
+        "text": "INTERNAL & EXTERNAL\nRANGE LIQUIDITY"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/irl_erl/page_2.png",
+        "text": "IRL & ERL\n1\nInternal Liquidity\n2\nExternal Liquidity\n3\nRelationship"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/irl_erl/page_3.png",
+        "text": "1\nInternal Range Liquidity"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/irl_erl/page_4.png",
+        "text": "2\nExternal Range Liquidity\nSellside Liquidity\nBuyside Liquidity\nExternal Range Liquidity"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/irl_erl/page_5.png",
+        "text": "3\nRelationship\nExternal Range Liquidity\nInternal Range Liquidity"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/irl_erl/page_6.png",
+        "text": "4\nExternal Range Liquidity\nInternal Range Liquidity\nRelationship"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/irl_erl/page_7.png",
+        "text": "5\nExternal Range Liquidity\nInternal Range Liquidity\nRelationship"
+      },
+      {
+        "page_number": 8,
+        "image_url": "/pdf_assets/irl_erl/page_8.png",
+        "text": "6\nExternal Range Liquidity\nExternal Range Liquidity\nInternal Range Liquidity\nRelationship"
+      },
+      {
+        "page_number": 9,
+        "image_url": "/pdf_assets/irl_erl/page_9.png",
+        "text": "7\nExternal Range Liquidity\nExternal Range Liquidity\nInternal Range Liquidity\nRelationship"
+      },
+      {
+        "page_number": 10,
+        "image_url": "/pdf_assets/irl_erl/page_10.png",
+        "text": "8\nExternal Range Liquidity\nExternal Range Liquidity\nInternal Range Liquidity\nRelationship"
+      },
+      {
+        "page_number": 11,
+        "image_url": "/pdf_assets/irl_erl/page_11.png",
+        "text": "Resources\nInternal & External Liquidity Video \nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "Liquidity.pdf": {
+    "file": "Liquidity.pdf",
+    "slug": "liquidity",
+    "total_pages": 8,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/liquidity/page_1.png",
+        "text": "LIQUIDITY:\nBUYSIDE & SELLSIDE"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/liquidity/page_2.png",
+        "text": "Liquidity\n1\nSwing Highs & Lows\n2\nBuyside & Sellside\n3\nTypes Of Liquidity\n4\nPrevious Day & Week\n5\nSession Highs & Lows"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/liquidity/page_3.png",
+        "text": "1\nSwing Highs & Lows\nA Swing High is formed when there is a high \nwith a lower high to the left and right. \nA Swing Low is formed when there is a low \nwith a higher low to the left and right."
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/liquidity/page_4.png",
+        "text": "2\nBuyside & Sellside\nA Swing High at the top of the \nrange will have stop losses from \nshort positions (buy stops). This \nis called buyside liquidity.\nA Swing Low at the bottom of \nthe range will have stop losses \nfrom long positions (sell stops). \nThis is called sellside liquidity.\nSellside Liquidity\nBuyside Liquidity"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/liquidity/page_5.png",
+        "text": "3\nTypes Of Liquidity\nSellside Liquidity\nBuyside Liquidity\nOld Highs & Lows are previous \nhighs and lows. \nSellside Liquidity\nBuyside Liquidity\nEqual Highs & Lows are when \nprice reaches the same price \nlevel multiple times. Appearing \nto be support and resistance.\nRelatively Equal Highs\nRelatively Equal Lows\nOld Low\nOld High"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/liquidity/page_6.png",
+        "text": "4\nPrevious Day & Week\nPrevious Week High & Low are \nliquidity levels that can be used as \na draw on liquidity or frame a \nreversal or continuation.\nPrevious Weeks Low\nPrevious Weeks High\nM\nT\nW\nTH\nF\nPrevious Day Low\nPrevious Day High\nDaily Timeframe\n4 Hour Timeframe\nPrevious Day High & Low are \nliquidity levels that can be used as \na draw on liquidity or frame a \nreversal or continuation."
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/liquidity/page_7.png",
+        "text": "5\nSession Highs & Lows\nAsian Session High\nAsian Session Low\nLondon Session Low\nLondon Session High\nSession Highs & Lows are \nliquidity levels that can be used as \na draw on liquidity or frame a \nreversal or continuation"
+      },
+      {
+        "page_number": 8,
+        "image_url": "/pdf_assets/liquidity/page_8.png",
+        "text": "Resources\nLiquidity Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "Daily_Bias.pdf": {
+    "file": "Daily_Bias.pdf",
+    "slug": "daily_bias",
+    "total_pages": 9,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/daily_bias/page_1.png",
+        "text": "DAILY BIAS"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/daily_bias/page_2.png",
+        "text": "Daily Bias\n1\nPrevious Day High & Low\n2\nPrevious Week High & Low\n3\nSwing Points\n4\nFailure To Displace\n5\nNext Day Model\nCredit to The MMXM Trader for his teachings"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/daily_bias/page_3.png",
+        "text": "1\nPrevious Day High & Low\nPrevious Day High & Low are liquidity levels that can be used \nas a draw on liquidity or frame a reversal or continuation.\nPrevious Day High\nPrevious Day Low\nIs price more likely to reach for previous day high or previous day low? \nPrevious Day High\nPrevious Day Low\nPrevious Day High\nPrevious Day Low\nPrevious Day High\nPrevious Day Low\nReversals can be framed off PDH and PDL when there is a failure to displace.\nReversal Framed \nOff PDH\nAnticipate PDL \nAs Draw\nReversal Framed \nOff PDL\nPDH\nAnticipate PDH \nAs Draw\nAnticipate PDH \nAs Draw\nDaily Timeframe"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/daily_bias/page_4.png",
+        "text": "2\nPrevious Day High & Low\nPrevious Day Low\nPrevious Day High\n4 Hour Timeframe\nPrevious Day Low\nPrevious Day High\n4 Hour Timeframe\nExample of Previous Day Low being used as a draw on \nliquidity and being used to frame a reversal. H4 chart is \nshown."
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/daily_bias/page_5.png",
+        "text": "3\nPrevious Week High & Low\nPrevious Week High & Low are liquidity levels that can be used as \na draw on liquidity or frame a reversal or continuation.\nPrevious Weeks Low\nPrevious Weeks High\nM\nT\nW\nTH\nF\nPrevious Weeks Low\nPrevious Weeks High\nM\nT\nW\nTH\nF\nDaily Timeframe"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/daily_bias/page_6.png",
+        "text": "4\nSwing Points\nSwing points in the market can be used \nas a draw on liquidity or be used to \nframe a reversal. \nAnticipate As Draw On Liquidity\nReversal Framed Off Swing Point\nDaily Timeframe"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/daily_bias/page_7.png",
+        "text": "5\nFailure To Displace\nFailure to displace over old highs & lows can \nbe used to frame a reversal. \nReversal Framed Off Swing Point\nReversal Framed Off Swing Point\nDaily Timeframe"
+      },
+      {
+        "page_number": 8,
+        "image_url": "/pdf_assets/daily_bias/page_8.png",
+        "text": "6\nNext Day Model\nWhen price respects a PD array or fails to \ndisplace over a swing high or low, the next \ncandle can be anticipated. \nDaily Timeframe"
+      },
+      {
+        "page_number": 9,
+        "image_url": "/pdf_assets/daily_bias/page_9.png",
+        "text": "Resources\nDaily Bias Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "Intraday_Bias.pdf": {
+    "file": "Intraday_Bias.pdf",
+    "slug": "intraday_bias",
+    "total_pages": 8,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/intraday_bias/page_1.png",
+        "text": "INTRADAY BIAS"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/intraday_bias/page_2.png",
+        "text": "Intraday Bias\n1\nPrevious Candle High (PCH) & Low (PCL) \n2\nSwing Points\n3\nFailure To Displace\n4\nNext Candle Model\nCredit to The MMXM Trader for his teachings"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/intraday_bias/page_3.png",
+        "text": "1\nPrevious Candle High & Low\nPrevious Candle High & Low are liquidity levels that can be \nused as a draw on liquidity or frame a reversal or \ncontinuation.\nPCH\nPCL\nIs price more likely to reach for previous candle high or low? \nPCH\nPCL\nPCH\nPCL\nPCH\nPCL\nReversals can be framed off PCH and PCL when there is a failure to displace.\nReversal Framed \nOff PCH\nAnticipate PCL \nAs Draw\nReversal Framed \nOff PCL\nPCH\nAnticipate PCH\nAs Draw\nAnticipate PCH\nAs Draw\nH4 / H1 / M30 / M15 \nTimeframe"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/intraday_bias/page_4.png",
+        "text": "2\nPrevious Candle High & Low\nPrevious Candle Low\nPrevious Candle High\nLower Time Frame\nPrevious Candle Low\nPrevious Candle High\nLower Time Frame\nExample of Previous Candle Low being used as a draw on \nliquidity and being used to frame a reversal. \nH4 / H1 / M30 / M15 \nTimeframe"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/intraday_bias/page_5.png",
+        "text": "3\nSwing Points\nSwing points in the market can be used \nas a draw on liquidity or be used to \nframe a reversal. \nAnticipate As Draw On Liquidity\nReversal Framed Off Swing Point\nH4 / H1 / M30 / M15 \nTimeframe"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/intraday_bias/page_6.png",
+        "text": "4\nFailure To Displace\nFailure to displace over old highs & lows can \nbe used to frame a reversal. \nReversal Framed Off Swing Point\nReversal Framed Off Swing Point\nH4 / H1 / M30 / M15 \nTimeframe"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/intraday_bias/page_7.png",
+        "text": "5\nNext Candle Model\nWhen price respects a PD array or fails to \ndisplace over a swing high or low, the next \ncandle can be anticipated. \nH4 / H1 / M30 / M15 \nTimeframe"
+      },
+      {
+        "page_number": 8,
+        "image_url": "/pdf_assets/intraday_bias/page_8.png",
+        "text": "Resources\nIntraday Bias Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "Killzones.pdf": {
+    "file": "Killzones.pdf",
+    "slug": "killzones",
+    "total_pages": 5,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/killzones/page_1.png",
+        "text": "ICT KILLZONES"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/killzones/page_2.png",
+        "text": "ICT Killzones\n1\nKillzones \n2\nSilver Bullet Windows"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/killzones/page_3.png",
+        "text": "1\nKillzones\nAsia: 20:00 – 00:00\nLondon: 02:00 – 05:00\nNew York AM: 07:00 – 10:00\nLondon Close: 10:00 – 12:00\nForex Killzones:\nAsia: 20:00 – 00:00\nLondon: 02:00 – 05:00\nNew York AM: 08:30 – 11:00\nNew York PM: 13:30 – 16:00\nIndices Killzones:\n20:00 – 00:00\n02:00 – 05:00\n07:00 – 10:00\n10:00 – 12:00\n20:00 – 00:00\n02:00 – 05:00\n08:30 – 11:00\n13:30 – 16:00\nEastern Standard Time (EST)"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/killzones/page_4.png",
+        "text": "2\nSilver Bullet Windows\nLondon SB: 03:00 – 04:00\nNew York AM SB: 10:00 – 11:00\nNew York PM SB: 14:00 – 15:00\nSilver Bullet:\n20:00 – 00:00\n02:00 – 05:00\n08:30 – 11:00\n13:30 – 16:00\n03:00–04:00\n10:00–11:00\n14:00–15:00\nEastern Standard Time (EST)"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/killzones/page_5.png",
+        "text": "Resources\nKillzones Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "Relative_Strength_ES.NQ.pdf": {
+    "file": "Relative_Strength_ES.NQ.pdf",
+    "slug": "relative_strength_es_nq",
+    "total_pages": 7,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/relative_strength_es_nq/page_1.png",
+        "text": "RELATIVE STRENGTH\nAND WEAKNESS\nS&P VS NASDAQ"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/relative_strength_es_nq/page_2.png",
+        "text": "Relative Strength/Weakness\n1\nWhat is Relative Strength & Weakness \n2\nUsing SMT\n3\nUsing ES/NQ Chart\n4\nReversals"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/relative_strength_es_nq/page_3.png",
+        "text": "1\nRelative Strength/Weakness\nStrength\nWeakness\nRelative Strength or Weakness is when comparing correlated \nassets, assessing which one is more bullish (strength) or \nbearish (weakness). \nES or NQ Chart"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/relative_strength_es_nq/page_4.png",
+        "text": "2\nUsing SMT\nSMT can be used to show a divergence between correlated \nassets. This can be used to show relative strength and \nweakness. \nRelative \nStrength\nRelative \nWeakness\nES or NQ Chart"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/relative_strength_es_nq/page_5.png",
+        "text": "3\nUsing ES/NQ Chart\nES/NQ :\nES/NQ :\nES :\nES :\nNQ :\nNQ :\nES/NQ :\nES :\nNQ :\nES/NQ :\nES :\nNQ :\nES/NQ Chart\nRelative Strength or Weakness can be determined \ncomparing ES to NQ by charting ES1! / NQ1! on Tradingview."
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/relative_strength_es_nq/page_6.png",
+        "text": "4\nReversals\nMy Theory is reversals on ES1!/NQ1! can be used to show\nthe change in correlation and used to anticipate a reversal \non ES or NQ and/or determine relative strength. \nES/NQ Chart\nES/NQ :\nES :\nNQ :\nES/NQ :\nES :\nNQ :"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/relative_strength_es_nq/page_7.png",
+        "text": "Resources\nRelative Strength / Weakness Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "SMT.pdf": {
+    "file": "SMT.pdf",
+    "slug": "smt",
+    "total_pages": 12,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/smt/page_1.png",
+        "text": "SMART MONEY\nTECHNIQUES\n(SMT)"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/smt/page_2.png",
+        "text": "SMT\n1\nCorrelated Pairs – Bullish\n2\nCorrelated Pairs – Bullish SMT\n4\nCorrelated Pairs – Bearish\n5\nCorrelated Pairs – Bearish SMT\n7\nInversely Correlated Pairs\n8\nInversely Correlated Pairs SMT"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/smt/page_3.png",
+        "text": "1\nCorrelated Pairs - Bullish\nLow\nHigher Low\nLow\nHigher Low"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/smt/page_4.png",
+        "text": "2\nCorrelated Pairs – Bullish SMT\nLow\nLower Low\nLow\nHigher Low"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/smt/page_5.png",
+        "text": "3\nCorrelated Pairs – Bullish SMT"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/smt/page_6.png",
+        "text": "4\nCorrelated Pairs - Bearish\nHigh\nLower High\nHigh\nLower High"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/smt/page_7.png",
+        "text": "5\nCorrelated Pairs – Bearish SMT\nHigh\nHigher High\nHigh\nLower High"
+      },
+      {
+        "page_number": 8,
+        "image_url": "/pdf_assets/smt/page_8.png",
+        "text": "6\nCorrelated Pairs – Bearish SMT"
+      },
+      {
+        "page_number": 9,
+        "image_url": "/pdf_assets/smt/page_9.png",
+        "text": "7\nInversely Correlated Pairs\nLower High\nHigh\nHigh\nHigher High\nLow\nLower Low\nLow\nHigher low"
+      },
+      {
+        "page_number": 10,
+        "image_url": "/pdf_assets/smt/page_10.png",
+        "text": "8\nInversely Correlated Pairs SMT\nLower High\nHigh\nHigh\nHigher High\nLow\nHigher Low\nLow\nLower Low"
+      },
+      {
+        "page_number": 11,
+        "image_url": "/pdf_assets/smt/page_11.png",
+        "text": "9\nInversely Correlated Pairs SMT"
+      },
+      {
+        "page_number": 12,
+        "image_url": "/pdf_assets/smt/page_12.png",
+        "text": "Resources\nSMT Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "CISD.pdf": {
+    "file": "CISD.pdf",
+    "slug": "cisd",
+    "total_pages": 5,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/cisd/page_1.png",
+        "text": "CHANGE IN STATE\nOF DELIVERY\n(CISD)"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/cisd/page_2.png",
+        "text": "CISD\n1\nCISD"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/cisd/page_3.png",
+        "text": "1\nCISD\nCISD\nImportant Level\nCISD\nImportant Level"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/cisd/page_4.png",
+        "text": "1\nCISD\nCISD\nImportant Level\nCISD\nImportant Level"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/cisd/page_5.png",
+        "text": "Resources\nCISD Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "Market_Structure_Shift.pdf": {
+    "file": "Market_Structure_Shift.pdf",
+    "slug": "market_structure_shift",
+    "total_pages": 6,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/market_structure_shift/page_1.png",
+        "text": "MARKET STRUCTURE\nSHIFT"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/market_structure_shift/page_2.png",
+        "text": "Market Structure Shift\n1\nDisplacement\n2\nMarket Structure Shift\n3\nHigher Time Frame Level"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/market_structure_shift/page_3.png",
+        "text": "1\nDisplacement\nDisplacement is an aggressive move with \nfull-bodied candles.\nThis can form in a single candle or in \nmultiple candles. \nGenerally, displacement candle(s) have FVG \npresent."
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/market_structure_shift/page_4.png",
+        "text": "2\nMarket Structure Shift\nWhen displacement occurs over or below a \nswing high or low, a market structure shift \nhappens.  \nHaving bodies close over/below previous structure is preferred.\nA stop raid before the MSS is preferred. \nA market structure shift (MSS) indicates a \nchange in trend from bullish to bearish or \nbearish to bullish.\nMarket Structure Shift"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/market_structure_shift/page_5.png",
+        "text": "3\nHigher Time Frame Level\nIt is important that a higher time frame level \nis engaged prior to the lower time frame \nmarket structure shift.  \nHigher Time Frame Level"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/market_structure_shift/page_6.png",
+        "text": "Resources\nMarket Structure Shift Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "MSS_vs_CISD.pdf": {
+    "file": "MSS_vs_CISD.pdf",
+    "slug": "mss_vs_cisd",
+    "total_pages": 7,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/mss_vs_cisd/page_1.png",
+        "text": "MSS vs CISD"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/mss_vs_cisd/page_2.png",
+        "text": "MSS vs CISD\n1\nMarket Structure Shift\n2\nChange In State Of Delivery\n3\nComparison\n4\nInversion"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/mss_vs_cisd/page_3.png",
+        "text": "1\nMarket Structure Shift\nMarket Structure Shift"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/mss_vs_cisd/page_4.png",
+        "text": "2\nCISD\nCISD\nImportant Level\nCISD\nImportant Level"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/mss_vs_cisd/page_5.png",
+        "text": "3\nComparison\nCISD\nImportant Level\nCISD\nImportant Level\nMarket Structure Shift \nMarket Structure Shift"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/mss_vs_cisd/page_6.png",
+        "text": "Inversion\n4"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/mss_vs_cisd/page_7.png",
+        "text": "Resources\nMSS vs CISD Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "MSS_vs_Liquidity_Grab.pdf": {
+    "file": "MSS_vs_Liquidity_Grab.pdf",
+    "slug": "mss_vs_liquidity_grab",
+    "total_pages": 7,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/mss_vs_liquidity_grab/page_1.png",
+        "text": "MSS VS LIQUIDITY GRAB"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/mss_vs_liquidity_grab/page_2.png",
+        "text": "MSS vs Liquidity Grab\n1\nDisplacement\n2\nMarket Structure Shift\n3\nLiquidity Grab\n4\nExample"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/mss_vs_liquidity_grab/page_3.png",
+        "text": "1\nDisplacement\nDisplacement is an aggressive move with \nfull-bodied candles.\nThis can form in a single candle or in \nmultiple candles. \nGenerally, displacement candle(s) have FVG \npresent."
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/mss_vs_liquidity_grab/page_4.png",
+        "text": "2\nMarket Structure Shift\nWhen displacement occurs over or below a \nswing high or low, a market structure shift \noccurs.  \nHaving bodies close over/below previous structure is preferred.\nA stop raid before the MSS is preferred. \nA market structure shift (MSS) indicates a \nchange in trend from bullish to bearish or \nbearish to bullish.\nMSS PDF\nMarket Structure Shift"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/mss_vs_liquidity_grab/page_5.png",
+        "text": "3\nLiquidity Grab\nWhen there is lack of displacement over or \nbelow a swing high or low, a liquidity grab \noccurs.\nHaving bodies fail to close over/below previous structure is preferred.\nA liquidity grab indicates a failure to \ncontinue in one direction.\nFailure to displace over previous high\nFailure to displace below previous low"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/mss_vs_liquidity_grab/page_6.png",
+        "text": "4\nExample\nFailure To Displace\nDisplacement"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/mss_vs_liquidity_grab/page_7.png",
+        "text": "Resources\nMSS vs Liquidity Grab Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "BreakerBlocks.pdf": {
+    "file": "BreakerBlocks.pdf",
+    "slug": "breakerblocks",
+    "total_pages": 20,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/breakerblocks/page_1.png",
+        "text": "BREAKER BLOCKS"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/breakerblocks/page_2.png",
+        "text": "Breaker Blocks\n1\nFair Value Gaps\n2\nBreaker Blocks\n4\nUnicorn"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/breakerblocks/page_3.png",
+        "text": "1\nBullish Breaker Block"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/breakerblocks/page_4.png",
+        "text": "2\nBullish Breaker Block\nLow"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/breakerblocks/page_5.png",
+        "text": "3\nBullish Breaker Block\nLow\nHigh"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/breakerblocks/page_6.png",
+        "text": "4\nBullish Breaker Block\nLow\nHigh\nLower Low"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/breakerblocks/page_7.png",
+        "text": "5\nBullish Breaker Block\nLow\nHigh\nLower Low\nHigher High"
+      },
+      {
+        "page_number": 8,
+        "image_url": "/pdf_assets/breakerblocks/page_8.png",
+        "text": "6\nBullish Breaker Block\nLow\nHigh\nLower Low\nHigher High"
+      },
+      {
+        "page_number": 9,
+        "image_url": "/pdf_assets/breakerblocks/page_9.png",
+        "text": "7\nBullish Breaker Block\nLow\nHigh\nLower Low\nHigher High"
+      },
+      {
+        "page_number": 10,
+        "image_url": "/pdf_assets/breakerblocks/page_10.png",
+        "text": "8\nBearish Breaker Block\nHigh"
+      },
+      {
+        "page_number": 11,
+        "image_url": "/pdf_assets/breakerblocks/page_11.png",
+        "text": "9\nBearish Breaker Block\nHigh\nLow"
+      },
+      {
+        "page_number": 12,
+        "image_url": "/pdf_assets/breakerblocks/page_12.png",
+        "text": "10\nBearish Breaker Block\nHigh\nLow\nHigher High"
+      },
+      {
+        "page_number": 13,
+        "image_url": "/pdf_assets/breakerblocks/page_13.png",
+        "text": "Bearish Breaker Block\nHigh\nLow\nHigher High\nLower Low\n11"
+      },
+      {
+        "page_number": 14,
+        "image_url": "/pdf_assets/breakerblocks/page_14.png",
+        "text": "12\nBearish Breaker Block\nHigh\nLow\nHigher High\nLower Low"
+      },
+      {
+        "page_number": 15,
+        "image_url": "/pdf_assets/breakerblocks/page_15.png",
+        "text": "13\nBearish Breaker Block\nHigh\nLow\nHigher High\nLower Low"
+      },
+      {
+        "page_number": 16,
+        "image_url": "/pdf_assets/breakerblocks/page_16.png",
+        "text": "14\nFair Value Gaps\nBearish\nFair Value Gap\nBullish\nFair Value Gap"
+      },
+      {
+        "page_number": 17,
+        "image_url": "/pdf_assets/breakerblocks/page_17.png",
+        "text": "15\nUnicorn Model"
+      },
+      {
+        "page_number": 18,
+        "image_url": "/pdf_assets/breakerblocks/page_18.png",
+        "text": "16\nStop Losses"
+      },
+      {
+        "page_number": 19,
+        "image_url": "/pdf_assets/breakerblocks/page_19.png",
+        "text": "16\nOB vs BB"
+      },
+      {
+        "page_number": 20,
+        "image_url": "/pdf_assets/breakerblocks/page_20.png",
+        "text": "Resources\nBreaker Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "Fair_Value_Gaps.pdf": {
+    "file": "Fair_Value_Gaps.pdf",
+    "slug": "fair_value_gaps",
+    "total_pages": 9,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/fair_value_gaps/page_1.png",
+        "text": "FAIR VALUE GAPS"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/fair_value_gaps/page_2.png",
+        "text": "Fair Value Gaps\n1\nFair Value Gaps\n2\nSIBI & BISI\n3\nVI & Opening Gap\n4\nEntries\n5\nStop Losses\n6\nInversion"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/fair_value_gaps/page_3.png",
+        "text": "1\nFair Value Gaps\nFair value gaps (FVG) are a three-candlestick \npattern where the high/low of the candle(1) \ndoes not overlap the low/high of candle(3). \n1\n2\n3\n1\n2\n3\nThe low of candle(1) \ndoes not overlap with \nthe high of candle(3)."
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/fair_value_gaps/page_4.png",
+        "text": "2\nSIBI & BISI\nSIBI: Sellside imbalance buyside inefficiency\nThis is a bearish FVG.\nPrice offered sellside and made an \nimbalance. This leaves buyside inefficient.\nCandle(1) low does not overlap with \nCandle(3) high. \nBISI: Buyside imbalance sellside inefficiency\nThis is a bullish FVG. \nPrice offered buyside and made an \nimbalance. This leaves sellside inefficient.\nCandle(1) high does not overlap with \nCandle(3) low. \n1\n2\n3\n1\n2\n3"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/fair_value_gaps/page_5.png",
+        "text": "3\nVI & Opening Gap\nFair Value Gap\nOpening Gap\nVolume Imbalance"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/fair_value_gaps/page_6.png",
+        "text": "4\nEntries\nIOFED\nFVG Fill\nConsequent Encroachment\nEntry\nEntry\n0.5\nEntry"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/fair_value_gaps/page_7.png",
+        "text": "5\nStop Losses\nFVG End\nSwing\nOrder Block\nStop\nStop\nStop"
+      },
+      {
+        "page_number": 8,
+        "image_url": "/pdf_assets/fair_value_gaps/page_8.png",
+        "text": "6\nInversion\nA SIBI used as support on the \nbuyside of the curve.\nA BISI used as resistance on the \nsellside of the curve."
+      },
+      {
+        "page_number": 9,
+        "image_url": "/pdf_assets/fair_value_gaps/page_9.png",
+        "text": "Resources\nFair Value Gap Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "Inversion.pdf": {
+    "file": "Inversion.pdf",
+    "slug": "inversion",
+    "total_pages": 17,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/inversion/page_1.png",
+        "text": "INVERSION"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/inversion/page_2.png",
+        "text": "Inversion\n1\nFair Value Gaps\n2\nInversion\n7\nConsequent Encroachment\n13\nOld SIBI / BISI"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/inversion/page_3.png",
+        "text": "1\nFair Value Gaps"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/inversion/page_4.png",
+        "text": "2\nInversion"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/inversion/page_5.png",
+        "text": "3\nInversion"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/inversion/page_6.png",
+        "text": "4\nInversion"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/inversion/page_7.png",
+        "text": "5\nInversion"
+      },
+      {
+        "page_number": 8,
+        "image_url": "/pdf_assets/inversion/page_8.png",
+        "text": "6\nInversion"
+      },
+      {
+        "page_number": 9,
+        "image_url": "/pdf_assets/inversion/page_9.png",
+        "text": "7\nConsequent Encroachment\n0.5"
+      },
+      {
+        "page_number": 10,
+        "image_url": "/pdf_assets/inversion/page_10.png",
+        "text": "8\nConsequent Encroachment\n0.5"
+      },
+      {
+        "page_number": 11,
+        "image_url": "/pdf_assets/inversion/page_11.png",
+        "text": "9\nConsequent Encroachment\n0.5"
+      },
+      {
+        "page_number": 12,
+        "image_url": "/pdf_assets/inversion/page_12.png",
+        "text": "10\nConsequent Encroachment\n0.5"
+      },
+      {
+        "page_number": 13,
+        "image_url": "/pdf_assets/inversion/page_13.png",
+        "text": "Consequent Encroachment\n0.5\n11"
+      },
+      {
+        "page_number": 14,
+        "image_url": "/pdf_assets/inversion/page_14.png",
+        "text": "Consequent Encroachment\n0.5\n12"
+      },
+      {
+        "page_number": 15,
+        "image_url": "/pdf_assets/inversion/page_15.png",
+        "text": "Old SIBI / BISI\n13"
+      },
+      {
+        "page_number": 16,
+        "image_url": "/pdf_assets/inversion/page_16.png",
+        "text": "Old SIBI / BISI\n14"
+      },
+      {
+        "page_number": 17,
+        "image_url": "/pdf_assets/inversion/page_17.png",
+        "text": "Resources\nInversion Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "Mitigation_Blocks.pdf": {
+    "file": "Mitigation_Blocks.pdf",
+    "slug": "mitigation_blocks",
+    "total_pages": 15,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/mitigation_blocks/page_1.png",
+        "text": "MITIGATION BLOCKS"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/mitigation_blocks/page_2.png",
+        "text": "Mitigation Blocks\n1\nMitigation Blocks"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/mitigation_blocks/page_3.png",
+        "text": "1\nMitigation Blocks"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/mitigation_blocks/page_4.png",
+        "text": "2\nMitigation Blocks"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/mitigation_blocks/page_5.png",
+        "text": "Mitigation Blocks\n3\nHTF Level"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/mitigation_blocks/page_6.png",
+        "text": "Mitigation Blocks\n4\nHTF Level"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/mitigation_blocks/page_7.png",
+        "text": "Mitigation Blocks\n5\nHTF Level"
+      },
+      {
+        "page_number": 8,
+        "image_url": "/pdf_assets/mitigation_blocks/page_8.png",
+        "text": "Mitigation Blocks\n6\nHTF Level"
+      },
+      {
+        "page_number": 9,
+        "image_url": "/pdf_assets/mitigation_blocks/page_9.png",
+        "text": "Mitigation Blocks\n7\nHTF Level"
+      },
+      {
+        "page_number": 10,
+        "image_url": "/pdf_assets/mitigation_blocks/page_10.png",
+        "text": "Mitigation Blocks\n8\nHTF Level"
+      },
+      {
+        "page_number": 11,
+        "image_url": "/pdf_assets/mitigation_blocks/page_11.png",
+        "text": "Mitigation Blocks\n9\nHTF Level"
+      },
+      {
+        "page_number": 12,
+        "image_url": "/pdf_assets/mitigation_blocks/page_12.png",
+        "text": "Mitigation Blocks\n10\nHTF Level"
+      },
+      {
+        "page_number": 13,
+        "image_url": "/pdf_assets/mitigation_blocks/page_13.png",
+        "text": "Mitigation Blocks\n11\nHTF Level"
+      },
+      {
+        "page_number": 14,
+        "image_url": "/pdf_assets/mitigation_blocks/page_14.png",
+        "text": "Mitigation Blocks\n12\nHTF Level"
+      },
+      {
+        "page_number": 15,
+        "image_url": "/pdf_assets/mitigation_blocks/page_15.png",
+        "text": "Resources\nMitigation Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "Orderblocks.pdf": {
+    "file": "Orderblocks.pdf",
+    "slug": "orderblocks",
+    "total_pages": 9,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/orderblocks/page_1.png",
+        "text": "ORDERBLOCKS"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/orderblocks/page_2.png",
+        "text": "Orderblocks\n1\nOrderblocks\n5\nMean Threshold\n6\nStop Losses"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/orderblocks/page_3.png",
+        "text": "1\nOrderblocks\nOB\nImportant Level\nOB\nImportant Level"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/orderblocks/page_4.png",
+        "text": "2\nOrderblocks\nOB\nOB"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/orderblocks/page_5.png",
+        "text": "3\nOrderblocks\nOB\nFVG"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/orderblocks/page_6.png",
+        "text": "4\nOrderblocks\nOB"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/orderblocks/page_7.png",
+        "text": "Mean Threshold\n5\nImportant Level\n0.5\n1\n0"
+      },
+      {
+        "page_number": 8,
+        "image_url": "/pdf_assets/orderblocks/page_8.png",
+        "text": "6\nStop Losses\nSwing Low\nOB"
+      },
+      {
+        "page_number": 9,
+        "image_url": "/pdf_assets/orderblocks/page_9.png",
+        "text": "Resources\nOB Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "OTE.pdf": {
+    "file": "OTE.pdf",
+    "slug": "ote",
+    "total_pages": 10,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/ote/page_1.png",
+        "text": "OPTIMAL TRADE\nENTRY"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/ote/page_2.png",
+        "text": "OTE\n1\nFibonacci Settings\n2\nAnchor Points\n3\nOptimal Trade Entry (OTE)\n4\nAlignment With PD Arrays\n5\nExtra"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/ote/page_3.png",
+        "text": "1\nFibonacci Settings\n1\n.79\n.705\n.62\n.5\n0\n1\n.79\n.705\n.62\n.5\n0\nThe Fibonacci Settings:\n0\n0.5\n0.62\n0.705\n0.79\n1"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/ote/page_4.png",
+        "text": "1\n.79\n.705\n.62\n.5\n0\n2\nAnchor Points\nAnchored from swing high to \nswing low. Liquidity PDF"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/ote/page_5.png",
+        "text": "3\nOptimal Trade Entry (OTE)\n1\n.79\n.705\n.62\n.5\n0"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/ote/page_6.png",
+        "text": "4\nAlignment With PD Arrays\n1\n.79\n.705\n.62\n.5\n0"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/ote/page_7.png",
+        "text": "1\n.79\n.705\n.62\n.5\n0\n5\nExtra"
+      },
+      {
+        "page_number": 8,
+        "image_url": "/pdf_assets/ote/page_8.png",
+        "text": "1\n.79\n.705\n.62\n.5\n0\n6\nExtra"
+      },
+      {
+        "page_number": 9,
+        "image_url": "/pdf_assets/ote/page_9.png",
+        "text": "1\n.79\n.705\n.62\n.5\n0\n7\nExtra"
+      },
+      {
+        "page_number": 10,
+        "image_url": "/pdf_assets/ote/page_10.png",
+        "text": "Resources\nOptimal Trade Entry Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "Position_Sizing.pdf": {
+    "file": "Position_Sizing.pdf",
+    "slug": "position_sizing",
+    "total_pages": 9,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/position_sizing/page_1.png",
+        "text": "POSITION SIZING"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/position_sizing/page_2.png",
+        "text": "Position Sizing\n1\nWin Rate & Risk : Reward\n2\nPosition Sizing Options\n3\nFixed Contract\n4\nFixed $ / %"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/position_sizing/page_3.png",
+        "text": "1\nWin Rate & RR\n20%\n30%\n40%\n50%\n60%\n1:1\n1:2\n1:3\n1:4\n1:5\nNot \nProfitable\nNot \nProfitable\nNot \nProfitable\nNot \nProfitable\nNot \nProfitable\nNot \nProfitable\nBreakeven\nBreakeven\nProfitable\nProfitable\nProfitable\nProfitable\nProfitable\nProfitable\nProfitable\nProfitable\nProfitable\nProfitable\nProfitable\nProfitable\nProfitable\nProfitable\nProfitable\nProfitable\nProfitable\nWin Rate\nRisk : Reward Ratio\nAssuming Same $ Risk Per Trade"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/position_sizing/page_4.png",
+        "text": "2\nPosition Sizing Options\nFixed Contracts\nFixed Dollar\nFixed Percentage\nOptions For Position Sizing"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/position_sizing/page_5.png",
+        "text": "3\nFixed Contract\n2 NQ Contracts\n20 Points Risk\nRisk = $800\n2 NQ Contracts Used In Each Scenario\n2 NQ Contracts\n40 Points Risk\nRisk = $1600\n2 NQ Contracts\n10 Points Risk\nRisk = $400"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/position_sizing/page_6.png",
+        "text": "4\nFixed Contract\n2 NQ Contracts\n20 Points Risk\nRisk = $800\n2 NQ Contracts Used In Each Scenario\n2 NQ Contracts\n40 Points Risk\nRisk = $1600\n2 NQ Contracts\n10 Points Risk\nRisk = $400\n-$800 (-1R)\n-$1600 (-1R)\n+$1600 (+4R)\n------------------------\n-$800 (+2R)???"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/position_sizing/page_7.png",
+        "text": "Fixed $/% \n5\n2.5 Contracts\n20 Points Risk\nRisk = $1000\nAdjust Contracts Per Scenario To \nMaintain Fixed Risk Of $1000\n$ of defined risk / $ per point / stop size\n1000/20/20 = 2.5\n5 NQ Contracts\n10 Points Risk\nRisk = $1000\n1.25 NQ Contracts\n40 Points Risk\nRisk = $1000\n1000/20/40 = 1.25\n1000/20/10 = 5\n25 Micros\n12.5 Micros\n50 Micros"
+      },
+      {
+        "page_number": 8,
+        "image_url": "/pdf_assets/position_sizing/page_8.png",
+        "text": "Fixed $/% \n6\n2.5 Contracts\n20 Points Risk\nRisk = $1000\nAdjust Contracts Per Scenario To \nMaintain Fixed Risk Of $1000\n$ of defined risk / $ per point / stop size\n1000/20/20 = 2.5\n5 NQ Contracts\n10 Points Risk\nRisk = $1000\n1.25 NQ Contracts\n40 Points Risk\nRisk = $1000\n1000/20/40 = 1.25\n1000/20/10 = 5\n25 Micros\n12.5 Micros\n50 Micros\n-$1000 (-1R)\n-$1000 (-1R)\n+$4000 (+4R)\n------------------------\n+$2000 (+2R)"
+      },
+      {
+        "page_number": 9,
+        "image_url": "/pdf_assets/position_sizing/page_9.png",
+        "text": "Resources\nPosition Sizing Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "Silver_Bullet_AM.pdf": {
+    "file": "Silver_Bullet_AM.pdf",
+    "slug": "silver_bullet_am",
+    "total_pages": 6,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/silver_bullet_am/page_1.png",
+        "text": "SILVER BULLET\nAM SESSION"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/silver_bullet_am/page_2.png",
+        "text": "Silver Bullet – AM\n1\nTime\n2\nFramework"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/silver_bullet_am/page_3.png",
+        "text": "1\nTime\n9:30\n10:00\n11:00\nAM Session \nSilver Bullet Window\n(EST)"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/silver_bullet_am/page_4.png",
+        "text": "2\nFramework\n9:00am Hourly High \n9:00am Hourly Low \n9:00am Hourly High \n9:00am Hourly Low \nIntraday bias video uses the previous candles high \nand low to frame a reversal. The previous hourly \ncandle (9:00am) will be used in this framework."
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/silver_bullet_am/page_5.png",
+        "text": "3\nFramework\n10:00\n11:00\nAM Session \nSilver Bullet Window\n(EST)\n9:00am Hourly High\n9:00am Hourly Low \nNASDAQ\n1 Minute Chart"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/silver_bullet_am/page_6.png",
+        "text": "Resources\nSilver Bullet Video \nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "Sons_Model.pdf": {
+    "file": "Sons_Model.pdf",
+    "slug": "sons_model",
+    "total_pages": 6,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/sons_model/page_1.png",
+        "text": "ICT SON’S MODEL"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/sons_model/page_2.png",
+        "text": "ICT Son’s Model\n1\nDraw On Liquidity  \n2\nStop Raid\n3\nEntry"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/sons_model/page_3.png",
+        "text": "1\nDraw On Liquidity\nH1 or M15 Chart"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/sons_model/page_4.png",
+        "text": "2\nStop Raid\nDraw On Liquidity\nStop Raid\nM5 Chart"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/sons_model/page_5.png",
+        "text": "3\nEntry\nM5 Stop Raid\n30s Chart"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/sons_model/page_6.png",
+        "text": "Resources\nICT Son’s Video\nYouTube\nDiscord\nTwitter\nAffiliate Links"
+      }
+    ]
+  },
+  "TTrades Reversal Sequence (TTRS).pdf": {
+    "file": "TTrades Reversal Sequence (TTRS).pdf",
+    "slug": "ttrades_reversal_sequence__ttrs_",
+    "total_pages": 18,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_1.png",
+        "text": "TTrades\nBuild an entry model\nFind an entry model that works for you"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_2.png",
+        "text": "Contents\nTTrades\nKillzones\nTimeframes\nConcepts\nOrder of reversal\n1\n2\n3\n11"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_3.png",
+        "text": "Killzones\nEastern Standard Time (EST)\nTTrades\n1"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_4.png",
+        "text": "TImeframes\nTTrades\n2\nChoose an entry timeframe that suites your personality\u001e\n0 Impatient people are generally better suited with a lower time frame entr\u0019\n0 Patient people are generally better suited on a higher time frame for entry\n(Impatient)\n(Patient)\nM1\nM15"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_5.png",
+        "text": "Concepts - FVG\nTTrades\n3\nBearish Example\nBullish Example\n1\n2\n3\n1\n2\n3"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_6.png",
+        "text": "Concepts - Inversion\nTTrades\n4"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_7.png",
+        "text": "Concepts - OB\nTTrades\n5\nBearish Orderblock\nBullish Orderblock\nImportant Level\nOB\nImportant Level\nOB"
+      },
+      {
+        "page_number": 8,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_8.png",
+        "text": "Concepts - Breaker\nTTrades\n6\nBearish Breaker Block\nBullish Breaker Block"
+      },
+      {
+        "page_number": 9,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_9.png",
+        "text": "Concepts - OTE\nTTrades\n7\n0.705\n0.62\n0.79\n0.5\n0\n1"
+      },
+      {
+        "page_number": 10,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_10.png",
+        "text": "Additional - Premium and Discount\nTTrades\n8\n0.5"
+      },
+      {
+        "page_number": 11,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_11.png",
+        "text": "Additional - Premium and Discount\nTTrades\n9\n0.5"
+      },
+      {
+        "page_number": 12,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_12.png",
+        "text": "Additional - SMT\nTTrades\n10\nStronger Asset\nWeaker Asset"
+      },
+      {
+        "page_number": 13,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_13.png",
+        "text": "Order of reversal\nTTrades\n11\n1\n\u0019\u001c turtle soup"
+      },
+      {
+        "page_number": 14,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_14.png",
+        "text": "Order of reversal\nTTrades\n12\n1\n2\n ! turtle sou\u001a\n\u0015! inversion"
+      },
+      {
+        "page_number": 15,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_15.png",
+        "text": "Order of reversal\nTTrades\n13\n1\n2\n3\n'( turtle sou\u001f\n\u0019( inversio\"\n\u001a( cisd / ob"
+      },
+      {
+        "page_number": 16,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_16.png",
+        "text": "Order of reversal\nTTrades\n14\n1\n2\n3\n4\n,' turtle sou$\n ' inversio(\n!' cisd / o\u0018\n\u0017' fvg"
+      },
+      {
+        "page_number": 17,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_17.png",
+        "text": "Order of reversal\nTTrades\n15\n1\n2\n3\n4\n5\n1+ turtle sou(\n$+ inversio,\n%+ cisd / o\u001b\n\u0019+ fv\u0017\n\u0016+ breaker"
+      },
+      {
+        "page_number": 18,
+        "image_url": "/pdf_assets/ttrades_reversal_sequence__ttrs_/page_18.png",
+        "text": "Additional Resources\nInstagram\nX (Twitter)\nDiscord\nWebsite\nYouTube\nVideo link\nTTrades"
+      }
+    ]
+  },
+  "Unicorn_Model.pdf": {
+    "file": "Unicorn_Model.pdf",
+    "slug": "unicorn_model",
+    "total_pages": 7,
+    "pages": [
+      {
+        "page_number": 1,
+        "image_url": "/pdf_assets/unicorn_model/page_1.png",
+        "text": "UNICORN MODEL"
+      },
+      {
+        "page_number": 2,
+        "image_url": "/pdf_assets/unicorn_model/page_2.png",
+        "text": "Unicorn Model\n1\nFair Value Gaps\n2\nBreaker Blocks\n4\nUnicorn"
+      },
+      {
+        "page_number": 3,
+        "image_url": "/pdf_assets/unicorn_model/page_3.png",
+        "text": "1\nFair Value Gaps\nBearish\nFair Value Gap\nBullish\nFair Value Gap"
+      },
+      {
+        "page_number": 4,
+        "image_url": "/pdf_assets/unicorn_model/page_4.png",
+        "text": "2\nBreaker Blocks\nBearish\nBreaker Block\nBullish\nBreaker Block"
+      },
+      {
+        "page_number": 5,
+        "image_url": "/pdf_assets/unicorn_model/page_5.png",
+        "text": "3\nBreaker Block\nBearish\nBreaker Block\nBullish\nBreaker Block"
+      },
+      {
+        "page_number": 6,
+        "image_url": "/pdf_assets/unicorn_model/page_6.png",
+        "text": "4\nUnicorn\nBearish\nBreaker Block \n+ FVG\nBullish\nBreaker Block\n+ FVG"
+      },
+      {
+        "page_number": 7,
+        "image_url": "/pdf_assets/unicorn_model/page_7.png",
+        "text": "Resources\nUnicorn Video \nYouTube\nDiscord\nTwitter\nAffiliate Links\n@4500px\n@Ash_Ketchum_21"
+      }
+    ]
+  }
+}

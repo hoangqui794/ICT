@@ -1,0 +1,54 @@
+05 Ghép model và quản trị rủi ro
+Thực hành các model có trình tự rõ và giữ risk cố định qua từng setup.
+
+- Silver Bullet AM - Silver_Bullet_AM.pdf
+Framework Silver Bullet AM dùng high/low của hourly candle 09:00 để frame setup trong cửa sổ 10:00–11:00 EST.
+
+Điểm cần nhớ
+Khung tài liệu tập trung vào AM Silver Bullet 10:00–11:00 EST.
+High/low của candle 09:00 được dùng để frame reversal.
+Cần kết hợp intraday bias và liquidity, không trade chỉ vì đúng giờ.
+Bài tập thực hành
+Trong replay NQ 1m, chỉ ghi nhận setup 10:00–11:00 NY và đánh dấu 09:00 hourly high/low.
+
+-ICT Son's Model - Sons_Model.pdf
+Model ba bước: xác định draw on liquidity, chờ stop raid, rồi tìm entry ở lower timeframe.
+
+Điểm cần nhớ
+Draw on liquidity được xác định trên H1 hoặc M15.
+Stop raid được theo dõi trên M5.
+Entry được tinh chỉnh xuống 30 giây trong ví dụ tài liệu.
+Bài tập thực hành
+Viết top-down plan theo đúng ba dòng: draw, stop raid, entry trigger.
+
+- Unicorn Model - Unicorn_Model.pdf
+Unicorn là vùng overlap giữa breaker block và fair value gap.
+
+Điểm cần nhớ
+Cần xác định đúng breaker block và FVG trước khi tìm overlap.
+Bullish và bearish Unicorn dùng cùng logic nhưng ngược hướng.
+Bối cảnh liquidity và structure vẫn quan trọng hơn tên model.
+Bài tập thực hành
+Tìm các vùng breaker + FVG overlap và so sánh lần retest đầu với các lần retest sau.
+
+-TTrades Reversal Sequence - TTrades Reversal Sequence (TTRS).pdf
+Xây entry model theo thứ tự reversal, sử dụng killzones, timeframe cá nhân và các concepts như FVG, inversion, OB, breaker.
+
+Điểm cần nhớ
+Entry model cần có thứ tự sự kiện, không chỉ một pattern.
+Chọn timeframe phù hợp tính kiên nhẫn và phong cách.
+FVG, inversion, OB và breaker được dùng như các thành phần của sequence.
+Bài tập thực hành
+Viết sequence của riêng bạn thành checklist có thứ tự và backtest mà không đổi luật giữa chừng.
+
+-Position Sizing - Position_Sizing.pdf
+Giải thích quan hệ win rate/RR và so sánh fixed contracts với fixed dollar/fixed percentage risk.
+
+Điểm cần nhớ
+Cùng số contract nhưng stop khác nhau tạo mức tiền rủi ro khác nhau.
+Fixed dollar hoặc fixed percentage điều chỉnh size để giữ risk nhất quán.
+Công thức cốt lõi: defined risk / dollar per point / stop size.
+Bài tập thực hành
+Tạo bảng size cho NQ/MNQ với ba stop size khác nhau nhưng cùng một mức risk tiền.
+
+-

@@ -1,0 +1,44 @@
+01
+Đọc thanh khoản
+Hiểu nơi stop-loss thường tập trung và cách xác định draw on liquidity.
+
+
+- Liquidity: Buyside & Sellside (Liquidity.pdf)
+Giới thiệu swing high/low, buyside liquidity, sellside liquidity, equal highs/lows và các high/low theo ngày, tuần, phiên.
+
+Điểm cần nhớ
+Stop của lệnh short thường tạo buyside liquidity phía trên swing high.
+Stop của lệnh long thường tạo sellside liquidity phía dưới swing low.
+PDH/PDL, PWH/PWL và session highs/lows có thể là draw on liquidity.
+Bài tập thực hành
+Trên chart NQ, đánh dấu PDH, PDL, Asian high/low và dự đoán pool nào dễ bị chạm trước.
+
+- Important Liquidity Levels (Important_Liquidity_Levels.pdf)
+Bản đồ nhanh các mức thanh khoản quan trọng theo candle, tháng, tuần, ngày, killzone và session.
+
+Điểm cần nhớ
+Consolidation có thể để lại liquidity một phía hoặc hai phía.
+Previous month/week/day highs và lows là các mốc cần chuẩn bị trước phiên.
+Tài liệu dùng múi giờ EST; cần kiểm tra DST khi quy đổi sang giờ Việt Nam.
+Bài tập thực hành
+Tạo checklist pre-market gồm previous month, week, day và session high/low.
+
+- Internal & External Range Liquidity (IRL-ERL.pdf)
+Giải thích quan hệ giữa thanh khoản bên trong range và thanh khoản bên ngoài range.
+
+Điểm cần nhớ
+ERL nằm ngoài biên range, thường ở swing high/low quan trọng.
+IRL nằm bên trong range, thường liên quan imbalance hoặc vùng giao dịch nội bộ.
+Price có thể luân chuyển từ IRL tới ERL hoặc từ ERL trở lại IRL.
+Bài tập thực hành
+Chọn một dealing range H1 và đánh dấu riêng IRL, ERL cùng đường đi kỳ vọng.
+
+- Discount & Premium (Discount__Premium.pdf)
+Chia dealing range bằng equilibrium 0.5 để đánh giá vị trí entry có lợi hơn cho Long hoặc Short.
+
+Điểm cần nhớ
+Nửa trên range là premium, nửa dưới là discount.
+Short ở premium và Long ở discount thường cho reward-to-risk tốt hơn.
+PD array cần được đặt trong đúng bối cảnh premium hoặc discount.
+Bài tập thực hành
+Kéo Fibonacci trên một range rõ ràng và so sánh RR của entry tại premium, equilibrium và discount.

@@ -1,0 +1,56 @@
+02
+Xây bias
+Dùng high/low cũ, failure to displace, thời gian và tương quan ES/NQ để tạo kịch bản.
+
+- Daily Bias (Daily_Bias.pdf)
+Xây daily bias từ previous day/week high-low, swing points, failure to displace và next-day model.
+
+Điểm cần nhớ
+PDH/PDL và PWH/PWL có thể là draw hoặc vùng frame reversal.
+Failure to displace qua high/low cũ là dữ kiện quan trọng cho reversal.
+Bias là kịch bản xác suất, không phải lý do vào lệnh một mình.
+Bài tập thực hành
+Trước phiên Mỹ, viết hai kịch bản: draw lên PDH và draw xuống PDL; ghi rõ điều kiện vô hiệu.
+
+- Intraday Bias (Intraday_Bias.pdf)
+Áp dụng previous candle high/low, swing point và failure to displace để xây bias cho candle hoặc phiên tiếp theo.
+
+Điểm cần nhớ
+PCH/PCL trên H4, H1, M30 hoặc M15 có thể làm draw hoặc frame reversal.
+Phản ứng tại swing point cần được xác nhận ở lower timeframe.
+Next-candle model giúp biến bias thành một kế hoạch có thời hạn.
+Bài tập thực hành
+Dùng H1 trước NY Open, đánh dấu high/low candle trước và theo dõi candle tiếp theo phản ứng thế nào.
+
+- ICT Killzones (Killzones.pdf)
+Tổng hợp các killzone và Silver Bullet windows theo giờ New York/EST.
+
+Điểm cần nhớ
+Thời gian giúp giới hạn lúc tìm setup thay vì quan sát cả ngày.
+New York AM và London Close là hai khung quan trọng với indices.
+Nguồn dùng EST; giờ Việt Nam thay đổi khi New York chuyển DST.
+Bài tập thực hành
+Đánh dấu NY Open, NY AM và Silver Bullet trên chart; thống kê setup chỉ trong các cửa sổ này.
+
+- Relative Strength: ES vs NQ - Relative_Strength_ES.NQ.pdf
+So sánh ES và NQ để nhận diện index mạnh/yếu hơn và thay đổi tương quan.
+
+Điểm cần nhớ
+Relative strength cho biết tài sản nào bullish hơn hoặc bearish hơn.
+SMT giữa ES/NQ có thể làm lộ divergence tại các high/low tương ứng.
+Tỷ lệ ES1!/NQ1! được tài liệu đề xuất như một góc nhìn bổ sung.
+Bài tập thực hành
+Tại NY Open, so sánh ES và NQ: index nào giữ low tốt hơn và index nào fail tại high?
+
+- SMT Divergence - SMT.pdf
+Trình bày divergence giữa các cặp tương quan thuận hoặc nghịch để đánh giá sức mạnh và khả năng đảo chiều.
+
+Điểm cần nhớ
+Bullish SMT xuất hiện khi một tài sản tạo lower low nhưng tài sản tương quan không xác nhận.
+Bearish SMT xuất hiện khi một tài sản tạo higher high nhưng tài sản tương quan không xác nhận.
+SMT nên kết hợp với liquidity, thời gian và PD array.
+Bài tập thực hành
+Replay ES và NQ, ghi lại SMT xảy ra trước reversal và SMT bị thất bại.
+
+- 
+

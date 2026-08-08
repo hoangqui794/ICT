@@ -1,0 +1,294 @@
+//@version=5
+indicator("Hộp Phiên Tối Giản (Session Boxes) + ICT Macros & HTF Candles Panel", overlay=true, max_boxes_count=500, max_labels_count=500)
+
+// ==========================================
+// 1. CÀI ĐẶT MÚI GIỜ (TIMEZONE CHUNG)
+// ==========================================
+tz_type = input.string("UTC", "Múi giờ hoạt động các Phiên", 
+     options=["Exchange", "UTC", "America/New_York", "Europe/London", "Asia/Tokyo"], 
+     group="Cài đặt Múi giờ")
+tz = tz_type == "Exchange" ? syminfo.timezone : tz_type
+
+// ==========================================
+// 2. CẤU HÌNH MÀU SẮC CHUNG & CÁC PHIÊN CHÍNH
+// ==========================================
+bg_gray_color = input.color(color.new(#808080, 93), "Màu nền xám chung của hộp", group="Cấu hình Chung")
+border_color  = input.color(color.new(#808080, 60), "Màu đường viền hộp", group="Cấu hình Chung")
+text_color    = input.color(color.gray, "Màu nhãn chữ dưới nến", group="Cấu hình Chung")
+days_input    = input.string("23456", "Các ngày trong tuần (2=Thứ Hai, 6=Thứ Sáu)", group="Cấu hình Chung")
+
+// Cấu hình các phiên chính
+show_asia   = input.bool(true, "Hiển thị Phiên Á", group="Phiên Á")
+asia_time   = input.session("0000-0900", "Khung giờ Phiên Á", group="Phiên Á")
+asia_label  = input.string("ASIA", "Nhãn chữ Phiên Á", group="Phiên Á")
+
+show_london = input.bool(true, "Hiển thị Phiên Âu (London)", group="Phiên Âu")
+london_time = input.session("0800-1700", "Khung giờ Phiên Âu", group="Phiên Âu")
+london_label = input.string("LONDON", "Nhãn chữ Phiên Âu", group="Phiên Âu")
+
+show_ny_am  = input.bool(true, "Hiển thị Phiên Mỹ Sáng (NY AM)", group="Phiên Mỹ Sáng")
+ny_am_time  = input.session("1300-1700", "Khung giờ Mỹ Sáng", group="Phiên Mỹ Sáng")
+ny_am_label = input.string("NY AM", "Nhãn chữ Mỹ Sáng", group="Phiên Mỹ Sáng")
+
+show_ny_pm  = input.bool(true, "Hiển thị Phiên Mỹ Chiều (NY PM)", group="Phiên Mỹ Chiều")
+ny_pm_time  = input.session("1700-2200", "Khung giờ Mỹ Chiều", group="Phiên Mỹ Chiều")
+ny_pm_label = input.string("NY PM", "Nhãn chữ Mỹ Chiều", group="Phiên Mỹ Chiều")
+
+// ==========================================
+// 3. CẤU HÌNH ICT MACROS
+// ==========================================
+show_macros   = input.bool(true, "Hiển thị ICT Macros", group="Cài đặt ICT Macros")
+macro_tz      = input.string("America/New_York", "Múi giờ hoạt động của Macro", 
+     options=["Exchange", "UTC", "America/New_York", "Europe/London", "Asia/Tokyo"], 
+     group="Cài đặt ICT Macros")
+macro_style   = input.string("Đường giới hạn (High/Low)", "Kiểu hiển thị Macro", 
+     options=["Đường giới hạn (High/Low)", "Hộp (Box)", "Chỉ đường High", "Chỉ đường Low"], 
+     group="Cài đặt ICT Macros")
+macro_color   = input.color(color.black, "Màu sắc đường line Macro", group="Cài đặt ICT Macros")
+macro_width   = input.int(1, "Độ dày đường line", group="Cài đặt ICT Macros")
+show_macro_labels = input.bool(true, "Hiển thị nhãn tên Macro", group="Cài đặt ICT Macros")
+
+// ==========================================
+// 4. CẤU HÌNH HIỂN THỊ NẾN KHUNG LỚN BÊN PHẢI (HTF CANDLES)
+// ==========================================
+show_htf_candles = input.bool(true, "Hiển thị nến khung lớn (HTF)", group="Nến Khung Lớn (Cột bên phải)")
+htf_tf           = input.timeframe("60", "Chọn Khung thời gian lớn", group="Nến Khung Lớn (Cột bên phải)")
+htf_bull_color   = input.color(#26a69a, "Màu nến Tăng", group="Nến Khung Lớn (Cột bên phải)")
+htf_bear_color   = input.color(#3b3c3d, "Màu nến Giảm", group="Nến Khung Lớn (Cột bên phải)")
+htf_offset       = input.int(8, "Khoảng cách từ nến cuối", minval=1, group="Nến Khung Lớn (Cột bên phải)")
+htf_spacing      = input.int(10, "Khoảng cách giữa các nến", minval=2, group="Nến Khung Lớn (Cột bên phải)")
+htf_width        = input.int(6, "Chiều rộng thân nến", minval=1, group="Nến Khung Lớn (Cột bên phải)")
+
+// ==========================================
+// 5. LOGIC XỬ LÝ & VẼ HỘP PHIÊN CHÍNH
+// ==========================================
+in_session(sess_time) =>
+    not na(time(timeframe.period, sess_time + ":" + days_input, tz))
+
+in_asia   = show_asia and in_session(asia_time)
+in_london = show_london and in_session(london_time)
+in_ny_am  = show_ny_am and in_session(ny_am_time)
+in_ny_pm  = show_ny_pm and in_session(ny_pm_time)
+
+is_start(in_sess) =>
+    in_sess and not in_sess[1]
+
+var box asia_box = na
+var float asia_high = na
+var float asia_low = na
+
+var box london_box = na
+var float london_high = na
+var float london_low = na
+
+var box ny_am_box = na
+var float ny_am_high = na
+var float ny_am_low = na
+
+var box ny_pm_box = na
+var float ny_pm_high = na
+var float ny_pm_low = na
+
+if is_start(in_asia)
+    asia_high := high
+    asia_low := low
+    asia_box := box.new(left=bar_index, top=asia_high, right=bar_index, bottom=asia_low, 
+                         bgcolor=bg_gray_color, border_color=border_color, border_style=line.style_dashed)
+    label.new(x=bar_index, y=low, text=asia_label, yloc=yloc.belowbar, 
+              color=color.new(color.white, 100), textcolor=text_color, 
+              style=label.style_none, size=size.normal)
+else if in_asia and not na(asia_box)
+    asia_high := math.max(asia_high, high)
+    asia_low := math.min(asia_low, low)
+    box.set_top(asia_box, asia_high)
+    box.set_bottom(asia_box, asia_low)
+    box.set_right(asia_box, bar_index)
+
+if is_start(in_london)
+    london_high := high
+    london_low := low
+    london_box := box.new(left=bar_index, top=london_high, right=bar_index, bottom=london_low, 
+                           bgcolor=bg_gray_color, border_color=border_color, border_style=line.style_dashed)
+    label.new(x=bar_index, y=low, text=london_label, yloc=yloc.belowbar, 
+              color=color.new(color.white, 100), textcolor=text_color, 
+              style=label.style_none, size=size.normal)
+else if in_london and not na(london_box)
+    london_high := math.max(london_high, high)
+    london_low := math.min(london_low, low)
+    box.set_top(london_box, london_high)
+    box.set_bottom(london_box, london_low)
+    box.set_right(london_box, bar_index)
+
+if is_start(in_ny_am)
+    ny_am_high := high
+    ny_am_low := low
+    ny_am_box := box.new(left=bar_index, top=ny_am_high, right=bar_index, bottom=ny_am_low, 
+                          bgcolor=bg_gray_color, border_color=border_color, border_style=line.style_dashed)
+    label.new(x=bar_index, y=low, text=ny_am_label, yloc=yloc.belowbar, 
+              color=color.new(color.white, 100), textcolor=text_color, 
+              style=label.style_none, size=size.normal)
+else if in_ny_am and not na(ny_am_box)
+    ny_am_high := math.max(ny_am_high, high)
+    ny_am_low := math.min(ny_am_low, low)
+    box.set_top(ny_am_box, ny_am_high)
+    box.set_bottom(ny_am_box, ny_am_low)
+    box.set_right(ny_am_box, bar_index)
+
+if is_start(in_ny_pm)
+    ny_pm_high := high
+    ny_pm_low := low
+    ny_pm_box := box.new(left=bar_index, top=ny_pm_high, right=bar_index, bottom=ny_pm_low, 
+                          bgcolor=bg_gray_color, border_color=border_color, border_style=line.style_dashed)
+    label.new(x=bar_index, y=low, text=ny_pm_label, yloc=yloc.belowbar, 
+              color=color.new(color.white, 100), textcolor=text_color, 
+              style=label.style_none, size=size.normal)
+else if in_ny_pm and not na(ny_pm_box)
+    ny_pm_high := math.max(ny_pm_high, high)
+    ny_pm_low := math.min(ny_pm_low, low)
+    box.set_top(ny_pm_box, ny_pm_high)
+    box.set_bottom(ny_pm_box, ny_pm_low)
+    box.set_right(ny_pm_box, bar_index)
+
+// ==========================================
+// 6. LOGIC XỬ LÝ & VẼ CÁC PHIÊN ICT MACROS
+// ==========================================
+in_macro_session(sess_time) =>
+    not na(time(timeframe.period, sess_time + ":" + days_input, macro_tz))
+
+in_mac1 = show_macros and in_macro_session("0233-0300")
+in_mac2 = show_macros and in_macro_session("0403-0430")
+in_mac3 = show_macros and in_macro_session("0850-0910")
+in_mac4 = show_macros and in_macro_session("0950-1010")
+in_mac5 = show_macros and in_macro_session("1050-1110")
+in_mac6 = show_macros and in_macro_session("1150-1210")
+in_mac7 = show_macros and in_macro_session("1310-1340")
+in_mac8 = show_macros and in_macro_session("1515-1545")
+
+in_any_macro = in_mac1 or in_mac2 or in_mac3 or in_mac4 or in_mac5 or in_mac6 or in_mac7 or in_mac8
+
+var line macro_high_line = na
+var line macro_low_line = na
+var box  macro_box = na
+var label macro_label = na
+
+var float macro_high = na
+var float macro_low = na
+var int macro_start_bar = na
+
+is_start_macro = in_any_macro and not in_any_macro[1]
+
+get_macro_label() =>
+    string label_text = ""
+    if in_mac1
+        label_text := "London Macro 1\n(02:33-03:00)"
+    else if in_mac2
+        label_text := "London Macro 2\n(04:03-04:30)"
+    else if in_mac3
+        label_text := "NY AM Macro 1\n(08:50-09:10)"
+    else if in_mac4
+        label_text := "NY AM Macro 2\n(09:50-10:10)"
+    else if in_mac5
+        label_text := "NY AM Macro 3\n(10:50-11:10)"
+    else if in_mac6
+        label_text := "NY Lunch Macro\n(11:50-12:10)"
+    else if in_mac7
+        label_text := "NY PM Macro 1\n(13:10-13:40)"
+    else if in_mac8
+        label_text := "NY PM Macro 2\n(15:15-15:45)"
+    label_text
+
+if is_start_macro
+    macro_high := high
+    macro_low := low
+    macro_start_bar := bar_index
+    
+    if macro_style == "Đường giới hạn (High/Low)"
+        macro_high_line := line.new(x1=bar_index, y1=macro_high, x2=bar_index, y2=macro_high, color=macro_color, width=macro_width)
+        macro_low_line := line.new(x1=bar_index, y1=macro_low, x2=bar_index, y2=macro_low, color=macro_color, width=macro_width)
+    else if macro_style == "Chỉ đường High"
+        macro_high_line := line.new(x1=bar_index, y1=macro_high, x2=bar_index, y2=macro_high, color=macro_color, width=macro_width)
+    else if macro_style == "Chỉ đường Low"
+        macro_low_line := line.new(x1=bar_index, y1=macro_low, x2=bar_index, y2=macro_low, color=macro_color, width=macro_width)
+    else if macro_style == "Hộp (Box)"
+        macro_box := box.new(left=bar_index, top=macro_high, right=bar_index, bottom=macro_low, 
+                             bgcolor=color.new(macro_color, 95), border_color=macro_color, border_style=line.style_solid, border_width=macro_width)
+                             
+    if show_macro_labels
+        macro_label := label.new(x=bar_index, y=high, text=get_macro_label(), yloc=yloc.abovebar, 
+                                 color=color.new(color.white, 100), textcolor=macro_color, 
+                                 style=label.style_none, size=size.small)
+
+else if in_any_macro
+    macro_high := math.max(macro_high, high)
+    macro_low := math.min(macro_low, low)
+    
+    if macro_style == "Đường giới hạn (High/Low)"
+        if not na(macro_high_line)
+            line.set_xy1(macro_high_line, macro_start_bar, macro_high)
+            line.set_xy2(macro_high_line, bar_index, macro_high)
+        if not na(macro_low_line)
+            line.set_xy1(macro_low_line, macro_start_bar, macro_low)
+            line.set_xy2(macro_low_line, bar_index, macro_low)
+    else if macro_style == "Chỉ đường High"
+        if not na(macro_high_line)
+            line.set_xy1(macro_high_line, macro_start_bar, macro_high)
+            line.set_xy2(macro_high_line, bar_index, macro_high)
+    else if macro_style == "Chỉ đường Low"
+        if not na(macro_low_line)
+            line.set_xy1(macro_low_line, macro_start_bar, macro_low)
+            line.set_xy2(macro_low_line, bar_index, macro_low)
+    else if macro_style == "Hộp (Box)"
+        if not na(macro_box)
+            box.set_top(macro_box, macro_high)
+            box.set_bottom(macro_box, macro_low)
+            box.set_right(macro_box, bar_index)
+
+// ==========================================
+// 7. TRUY VẤN DỮ LIỆU & VẼ NẾN KHUNG LỚN CỘT BÊN PHẢI (HTF)
+// ==========================================
+// Lấy dữ liệu OHLC của 4 nến HTF gần nhất (bao gồm nến đang chạy)
+[o0, h0, l0, c0, o1, h1, l1, c1, o2, h2, l2, c2, o3, h3, l3, c3] = request.security(syminfo.tickerid, htf_tf, [open, high, low, close, open[1], high[1], low[1], close[1], open[2], high[2], low[2], close[2], open[3], high[3], low[3], close[3]], barmerge.gaps_off, barmerge.lookahead_off)
+
+// Mảng lưu trữ các đối tượng vẽ toàn cục
+var box[] htf_boxes = array.new_box()
+var line[] htf_lines = array.new_line()
+
+// Khai báo hàm vẽ nến HTF toàn cục (đã di chuyển ra ngoài khối IF để tránh lỗi cú pháp)
+draw_htf(center_x, o, h, l, c) =>
+    color candle_color = c >= o ? htf_bull_color : htf_bear_color
+    float body_top = c >= o ? c : o
+    float body_bottom = c >= o ? o : c
+    
+    // Vẽ thân nến
+    body_box = box.new(left=center_x - htf_width, top=body_top, right=center_x + htf_width, bottom=body_bottom,
+                       bgcolor=candle_color, border_color=candle_color, border_style=line.style_solid)
+    // Vẽ râu nến
+    wick_line = line.new(x1=center_x, y1=h, x2=center_x, y2=l, color=candle_color, width=1)
+    
+    array.push(htf_boxes, body_box)
+    array.push(htf_lines, wick_line)
+
+// Chỉ vẽ trên nến cuối cùng của biểu đồ
+if barstate.islast and show_htf_candles
+    // Xóa các hình vẽ của tick trước để vẽ lại theo thời gian thực
+    if array.size(htf_boxes) > 0
+        for i = 0 to array.size(htf_boxes) - 1
+            box.delete(array.get(htf_boxes, i))
+        array.clear(htf_boxes)
+        
+    if array.size(htf_lines) > 0
+        for i = 0 to array.size(htf_lines) - 1
+            line.delete(array.get(htf_lines, i))
+        array.clear(htf_lines)
+
+    // Tính toán tọa độ X (về phía tương lai / bên phải) cho 4 cây nến
+    x3 = bar_index + htf_offset                      // Cây nến cũ nhất (thứ 4)
+    x2 = x3 + htf_spacing                            // Cây nến thứ 3
+    x1 = x2 + htf_spacing                            // Cây nến thứ 2
+    x0 = x1 + htf_spacing                            // Cây nến mới nhất đang chạy (thứ 1)
+
+    // Thực hiện vẽ từ trái qua phải (từ cũ đến mới)
+    draw_htf(x3, o3, h3, l3, c3)
+    draw_htf(x2, o2, h2, l2, c2)
+    draw_htf(x1, o1, h1, l1, c1)
+    draw_htf(x0, o0, h0, l0, c0) // Cây nến này sẽ nhảy giá trực tiếp (Live)

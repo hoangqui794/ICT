@@ -1,0 +1,65 @@
+04
+Chọn vùng entry
+Học FVG, order block, breaker, mitigation, inversion và OTE.
+
+- Fair Value Gaps - Fair_Value_Gaps.pdf
+Giải thích FVG ba candle, SIBI/BISI, volume imbalance, opening gap, entry, stop và inversion.
+
+Điểm cần nhớ
+FVG là vùng candle 1 và candle 3 không overlap.
+BISI là bullish imbalance; SIBI là bearish imbalance.
+Entry có thể dùng full fill hoặc consequent encroachment 0.5.
+Bài tập thực hành
+Đánh dấu FVG có displacement và FVG không có displacement; so sánh khả năng giữ giá.
+
+- Orderblocks - Orderblocks.pdf
+Tài liệu hình ảnh về order block, important level, FVG alignment, mean threshold và vị trí stop.
+
+Điểm cần nhớ
+Order block cần bối cảnh và displacement, không chỉ là opposing candle bất kỳ.
+Mean threshold 0.5 có thể dùng để tinh chỉnh vùng phản ứng.
+Stop cần đặt theo cấu trúc, không đặt máy móc sát block.
+Bài tập thực hành
+Chỉ ghi nhận order block tạo displacement và phá structure; loại bỏ opposing candle ngẫu nhiên.
+
+- Breaker Blocks - BreakerBlocks.pdf
+Chuỗi hình ảnh xây dựng bullish/bearish breaker block và liên hệ với FVG, Unicorn.
+
+Điểm cần nhớ
+Breaker hình thành sau khi một vùng kỳ vọng bị vi phạm và đổi vai trò.
+Liquidity raid và structure shift giúp đặt breaker vào đúng bối cảnh.
+Breaker overlap với FVG tạo nền cho Unicorn Model.
+Bài tập thực hành
+Tìm breaker xuất hiện sau stop raid và MSS; đánh dấu lần retest đầu tiên.
+
+-Mitigation Blocks - Mitigation_Blocks.pdf
+Tài liệu thiên về hình ảnh mô tả mitigation block và cách đặt nó trong bối cảnh HTF level.
+
+Điểm cần nhớ
+Mitigation block không nên tách khỏi cấu trúc đã thất bại.
+HTF level giúp lọc các block thiếu bối cảnh.
+Quan sát cách price quay lại mitigate trước khi tiếp tục delivery.
+Bài tập thực hành
+Thu thập các mitigation block có HTF level và so sánh với block không có HTF context.
+
+-Inversion - Inversion.pdf
+Tài liệu hình ảnh về FVG bị xuyên qua rồi đổi vai trò, consequent encroachment và old SIBI/BISI.
+
+Điểm cần nhớ
+Bullish/bearish FVG có thể đổi vai trò sau khi bị vi phạm.
+Consequent encroachment giúp đánh giá điểm giữa vùng inversion.
+Old SIBI/BISI có thể trở thành vùng phản ứng trong delivery mới.
+Bài tập thực hành
+Tìm FVG bị đóng xuyên, sau đó quan sát lần retest từ phía đối diện.
+
+-Optimal Trade Entry - OTE.pdf
+Dùng Fibonacci 0.62–0.79, đặc biệt 0.705, để tìm entry trong một swing phù hợp.
+
+Điểm cần nhớ
+Anchor points cần dựa trên swing high và swing low rõ ràng.
+OTE không phải setup độc lập; cần alignment với PD array và bias.
+Vùng 0.62–0.79 giúp tinh chỉnh entry nhưng không đảm bảo reversal.
+Bài tập thực hành
+So sánh OTE có PD array alignment và OTE đứng một mình trên 30 mẫu.
+
+-
