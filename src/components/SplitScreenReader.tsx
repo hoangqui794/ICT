@@ -62,6 +62,7 @@ export const SplitScreenReader: React.FC<SplitScreenReaderProps> = ({
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', height: 'calc(100vh - 100px)' }}>
       {/* DUAL STUDIO: LEFT = RAW PDF FILE, RIGHT = EMBEDDED YOUTUBE VIDEO */}
       <div 
+        className="split-container"
         ref={containerRef}
         style={{ 
           display: 'flex',
@@ -73,7 +74,7 @@ export const SplitScreenReader: React.FC<SplitScreenReaderProps> = ({
       >
         
         {/* LEFT COLUMN: Direct Embedded PDF Document */}
-        <div className="glass-card" style={{ width: `calc(${leftWidth}% - 6px)`, padding: '8px', display: 'flex', flexDirection: 'column', gap: '6px', height: '100%', transition: isDragging ? 'none' : 'width 0.3s cubic-bezier(0.16, 1, 0.3, 1)', willChange: 'width' }}>
+        <div className="glass-card split-pane" style={{ width: `calc(${leftWidth}% - 6px)`, padding: '8px', display: 'flex', flexDirection: 'column', gap: '6px', height: '100%', transition: isDragging ? 'none' : 'width 0.3s cubic-bezier(0.16, 1, 0.3, 1)', willChange: 'width' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '4px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 700, color: '#FFF' }}>
               <FileText size={16} color="var(--primary)" />
@@ -120,6 +121,7 @@ export const SplitScreenReader: React.FC<SplitScreenReaderProps> = ({
 
         {/* DIVIDER RESIZE HANDLE */}
         <div
+          className="split-divider"
           onMouseDown={() => setIsDragging(true)}
           style={{
             width: '12px',
@@ -147,7 +149,7 @@ export const SplitScreenReader: React.FC<SplitScreenReaderProps> = ({
         </div>
 
         {/* RIGHT COLUMN: Direct Embedded YouTube Video */}
-        <div className="glass-card" style={{ width: `calc(${100 - leftWidth}% - 6px)`, padding: '8px', display: 'flex', flexDirection: 'column', gap: '6px', height: '100%', transition: isDragging ? 'none' : 'width 0.3s cubic-bezier(0.16, 1, 0.3, 1)', willChange: 'width' }}>
+        <div className="glass-card split-pane" style={{ width: `calc(${100 - leftWidth}% - 6px)`, padding: '8px', display: 'flex', flexDirection: 'column', gap: '6px', height: '100%', transition: isDragging ? 'none' : 'width 0.3s cubic-bezier(0.16, 1, 0.3, 1)', willChange: 'width' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '4px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 700, color: '#FFF' }}>
               <Youtube size={16} color="#EF4444" />

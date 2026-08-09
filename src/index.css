@@ -667,4 +667,32 @@ button {
     position: static;
     height: auto;
   }
+
+  /* Responsive Navbar */
+  .navbar-inner {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Responsive Roadmap Grid */
+  .roadmap-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Responsive Split Screen Reader */
+  .split-container {
+    flex-direction: column !important;
+    overflow-y: auto;
+  }
+  .split-pane {
+    width: 100% !important;
+    min-height: 50vh !important;
+  }
+  .split-divider {
+    display: none !important;
+  }
 }
