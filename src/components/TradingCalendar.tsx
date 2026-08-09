@@ -48,6 +48,54 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
   const [tradesCount, setTradesCount] = useState<number>(1);
   const [lots, setLots] = useState<number>(0);
 
+  // Custom Toast Notification system
+  interface AppNotification {
+    id: string;
+    message: string;
+    type: 'success' | 'error' | 'info';
+  }
+  const [notifications, setNotifications] = useState<AppNotification[]>([]);
+  const showNotification = (msg: string, type: 'success' | 'error' | 'info' = 'info') => {
+    const id = Date.now().toString() + Math.random().toString();
+    setNotifications(prev => [...prev, { id, message: msg, type }]);
+    setTimeout(() => {
+      setNotifications(prev => prev.filter(n => n.id !== id));
+    }, 4500);
+  };
+
+  // Custom Confirm Modal state
+  interface ConfirmModalState {
+    isOpen: boolean;
+    message: string;
+    onConfirm: () => void;
+    onCancel: () => void;
+  }
+  const [confirmModal, setConfirmModal] = useState<ConfirmModalState>({
+    isOpen: false,
+    message: '',
+    onConfirm: () => {},
+    onCancel: () => {}
+  });
+
+  const showConfirm = (message: string, onConfirm: () => void, onCancel?: () => void) => {
+    setConfirmModal({
+      isOpen: true,
+      message,
+      onConfirm: () => {
+        onConfirm();
+        closeConfirm();
+      },
+      onCancel: () => {
+        if (onCancel) onCancel();
+        closeConfirm();
+      }
+    });
+  };
+
+  const closeConfirm = () => {
+    setConfirmModal(prev => ({ ...prev, isOpen: false }));
+  };
+
   // Mobile layout state
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 960);
 
@@ -80,6 +128,8 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
   const monthPrefix = `${year}-${String(month + 1).padStart(2, '0')}`;
   const monthTrades = trades.filter(t => t.date.startsWith(monthPrefix));
   const monthlyPnl = monthTrades.reduce((s, t) => s + t.pnl, 0);
+  const monthlyGrossProfit = monthTrades.filter(t => t.pnl > 0).reduce((s, t) => s + t.pnl, 0);
+  const monthlyGrossLoss = monthTrades.filter(t => t.pnl < 0).reduce((s, t) => s + t.pnl, 0);
   const winDays = new Set(monthTrades.filter(t => t.pnl > 0).map(t => t.date)).size;
   const lossDays = new Set(monthTrades.filter(t => t.pnl < 0).map(t => t.date)).size;
   const totalTradesCount = monthTrades.reduce((s, t) => s + (t.tradesCount || 1), 0);
@@ -156,7 +206,7 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
 
   const handleImageSelection = (file: File) => {
     if (!file.type.startsWith('image/')) {
-      alert(lang === 'vi' ? 'Vui lòng chọn một tệp hình ảnh!' : 'Please select an image file!');
+      showNotification(lang === 'vi' ? 'Vui lòng chọn một tệp hình ảnh!' : 'Please select an image file!', 'error');
       return;
     }
 
@@ -220,9 +270,9 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
 
     if (!geminiKey.trim()) {
       if (hasImage) {
-        alert(lang === 'vi' 
+        showNotification(lang === 'vi' 
           ? 'Phân tích hình ảnh yêu cầu Gemini API Key. Vui lòng cấu hình API Key ở mục trên.' 
-          : 'Image analysis requires a Gemini API Key. Please configure the API Key above.');
+          : 'Image analysis requires a Gemini API Key. Please configure the API Key above.', 'error');
         return;
       }
       parseLocally(aiText);
@@ -318,14 +368,14 @@ Response MUST follow this strict JSON schema (no markdown formatting, no backtic
       if (!success) {
         const errMsg = lastError?.message || lastError || 'Unknown error';
         if (hasText) {
-          alert(lang === 'vi' 
+          showNotification(lang === 'vi' 
             ? `Không thể phân tích bằng AI (${errMsg}). Đang sử dụng bộ phân tích cục bộ.` 
-            : `Could not parse with AI (${errMsg}). Falling back to local parser.`);
+            : `Could not parse with AI (${errMsg}). Falling back to local parser.`, 'info');
           parseLocally(aiText);
         } else {
-          alert(lang === 'vi'
+          showNotification(lang === 'vi'
             ? `Không thể kết nối đến các model Gemini API hoặc dữ liệu ảnh không hợp lệ.\nChi tiết: ${errMsg}`
-            : `Failed to connect to Gemini API models or invalid image data.\nDetails: ${errMsg}`);
+            : `Failed to connect to Gemini API models or invalid image data.\nDetails: ${errMsg}`, 'error');
         }
       }
     } catch (err: any) {
@@ -349,6 +399,8 @@ Response MUST follow this strict JSON schema (no markdown formatting, no backtic
       lots
     }]);
     
+    showNotification(lang === 'vi' ? 'Đã thêm lệnh vào nhật ký thành công!' : 'Successfully added trade to journal!', 'success');
+
     // Reset form states
     setPnl(0); 
     setNotes(''); 
@@ -372,8 +424,9 @@ Response MUST follow this strict JSON schema (no markdown formatting, no backtic
       document.body.appendChild(downloadAnchorNode);
       downloadAnchorNode.click();
       downloadAnchorNode.remove();
+      showNotification(lang === 'vi' ? 'Đã xuất file nhật ký thành công!' : 'Successfully exported journal file!', 'success');
     } catch (err) {
-      alert(lang === 'vi' ? 'Lỗi khi xuất file!' : 'Error exporting file!');
+      showNotification(lang === 'vi' ? 'Lỗi khi xuất file!' : 'Error exporting file!', 'error');
     }
   };
 
@@ -397,19 +450,19 @@ Response MUST follow this strict JSON schema (no markdown formatting, no backtic
             ? `Bạn có chắc muốn nhập ${importedData.length} bản ghi nhật ký? Hành động này sẽ gộp vào dữ liệu hiện có.`
             : `Are you sure you want to import ${importedData.length} journal records? This will merge with existing data.`;
           
-          if (window.confirm(confirmMsg)) {
+          showConfirm(confirmMsg, () => {
             setTrades(prev => {
               const existingIds = new Set(prev.map(t => t.id));
               const newTrades = importedData.filter(t => !existingIds.has(t.id));
               return [...prev, ...newTrades];
             });
-            alert(lang === 'vi' ? 'Nhập dữ liệu thành công!' : 'Data imported successfully!');
-          }
+            showNotification(lang === 'vi' ? 'Nhập dữ liệu thành công!' : 'Data imported successfully!', 'success');
+          });
         } else {
-          alert(lang === 'vi' ? 'File không chứa một danh sách hợp lệ!' : 'File does not contain a valid list!');
+          showNotification(lang === 'vi' ? 'File không chứa một danh sách hợp lệ!' : 'File does not contain a valid list!', 'error');
         }
       } catch (err) {
-        alert(lang === 'vi' ? 'Lỗi khi đọc file. Hãy chắc chắn đây là file JSON hợp lệ của nhật ký!' : 'Error reading file. Ensure it is a valid journal JSON file!');
+        showNotification(lang === 'vi' ? 'Lỗi khi đọc file. Hãy chắc chắn đây là file JSON hợp lệ của nhật ký!' : 'Error reading file. Ensure it is a valid journal JSON file!', 'error');
       }
     };
     reader.readAsText(file);
@@ -458,7 +511,6 @@ Response MUST follow this strict JSON schema (no markdown formatting, no backtic
           gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', 
           gap: isMobile ? '8px' : '12px' 
         }}>
-          {/* Monthly PnL */}
           <div style={{
             background: monthlyPnl >= 0
               ? 'linear-gradient(135deg, rgba(0,240,255,0.08) 0%, rgba(0,240,255,0.03) 100%)'
@@ -478,9 +530,27 @@ Response MUST follow this strict JSON schema (no markdown formatting, no backtic
               <div style={{
                 fontSize: isMobile ? '0.95rem' : '1.3rem', fontWeight: 900, fontFamily: 'var(--font-mono)',
                 color: monthlyPnl >= 0 ? 'var(--primary)' : 'var(--pink)',
-                textShadow: `0 0 16px ${monthlyPnl >= 0 ? 'rgba(0,240,255,0.4)' : 'rgba(244,114,182,0.4)'}`
+                textShadow: `0 0 16px ${monthlyPnl >= 0 ? 'rgba(0,240,255,0.4)' : 'rgba(244,114,182,0.4)'}`,
+                lineHeight: 1.1
               }}>
                 {monthlyPnl !== 0 ? fmt(monthlyPnl) : '$0'}
+              </div>
+              <div style={{
+                fontSize: isMobile ? '0.52rem' : '0.68rem',
+                color: 'var(--text-secondary)',
+                fontFamily: 'var(--font-mono)',
+                marginTop: '4px',
+                display: 'flex',
+                gap: '8px',
+                whiteSpace: 'nowrap'
+              }}>
+                <span style={{ color: 'var(--primary)' }}>
+                  {lang === 'vi' ? 'Thắng:' : 'Win:'} {fmt(monthlyGrossProfit)}
+                </span>
+                <span style={{ opacity: 0.3 }}>|</span>
+                <span style={{ color: 'var(--pink)' }}>
+                  {lang === 'vi' ? 'Thua:' : 'Loss:'} {fmt(monthlyGrossLoss)}
+                </span>
               </div>
             </div>
           </div>
@@ -1176,7 +1246,10 @@ Response MUST follow this strict JSON schema (no markdown formatting, no backtic
                         fontSize: '0.92rem', fontWeight: 900, fontFamily: 'var(--font-mono)',
                         color: t.pnl >= 0 ? 'var(--primary)' : 'var(--pink)'
                       }}>{fmt(t.pnl)}</span>
-                      <button onClick={() => setTrades(prev => prev.filter(x => x.id !== t.id))} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.15)', cursor: 'pointer', padding: '2px', display: 'flex', transition: 'color 0.2s' }}>
+                      <button onClick={() => {
+                        setTrades(prev => prev.filter(x => x.id !== t.id));
+                        showNotification(lang === 'vi' ? 'Đã xóa lệnh khỏi nhật ký!' : 'Deleted trade from journal!', 'info');
+                      }} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.15)', cursor: 'pointer', padding: '2px', display: 'flex', transition: 'color 0.2s' }}>
                         <Trash2 size={14}/>
                       </button>
                     </div>
@@ -1184,6 +1257,163 @@ Response MUST follow this strict JSON schema (no markdown formatting, no backtic
                   {t.notes && <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>{t.notes}</p>}
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Notification Container */}
+      <div style={{
+        position: 'fixed',
+        bottom: '24px',
+        right: '24px',
+        zIndex: 99999,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
+        maxWidth: '360px',
+        width: 'calc(100% - 48px)',
+        pointerEvents: 'none'
+      }}>
+        {notifications.map(n => (
+          <div 
+            key={n.id} 
+            className="toast-item"
+            style={{
+              pointerEvents: 'auto',
+              background: n.type === 'success' 
+                ? 'linear-gradient(135deg, rgba(0,255,157,0.18) 0%, rgba(0,255,157,0.08) 100%)' 
+                : n.type === 'error'
+                  ? 'linear-gradient(135deg, rgba(244,114,182,0.18) 0%, rgba(244,114,182,0.08) 100%)'
+                  : 'linear-gradient(135deg, rgba(0,240,255,0.18) 0%, rgba(0,240,255,0.08) 100%)',
+              border: `1px solid ${
+                n.type === 'success' 
+                  ? 'rgba(0,255,157,0.35)' 
+                  : n.type === 'error'
+                    ? 'rgba(244,114,182,0.35)'
+                    : 'rgba(0,240,255,0.35)'
+              }`,
+              boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.45), 0 0 15px ${
+                n.type === 'success' 
+                  ? 'rgba(0,255,157,0.1)' 
+                  : n.type === 'error'
+                    ? 'rgba(244,114,182,0.1)'
+                    : 'rgba(0,240,255,0.1)'
+              }`,
+              backdropFilter: 'blur(10px)',
+              borderRadius: 'var(--radius-md)',
+              padding: '12px 18px',
+              color: '#FFF',
+              fontSize: '0.82rem',
+              fontWeight: 500,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+              fontFamily: 'var(--font-sans)',
+              borderLeft: `4px solid ${
+                n.type === 'success' 
+                  ? 'var(--emerald)' 
+                  : n.type === 'error'
+                    ? 'var(--pink)'
+                    : 'var(--primary)'
+              }`
+            }}
+          >
+            <div style={{ flex: 1, lineHeight: '1.4' }}>{n.message}</div>
+            <button 
+              onClick={() => setNotifications(prev => prev.filter(item => item.id !== n.id))}
+              style={{ 
+                background: 'none', 
+                border: 'none', 
+                color: 'rgba(255,255,255,0.4)', 
+                cursor: 'pointer', 
+                fontSize: '0.9rem',
+                padding: '4px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'color 0.2s'
+              }}
+              onMouseEnter={e => e.currentTarget.style.color = '#FFF'}
+              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
+            >
+              <X size={14} />
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* Custom Confirm Modal */}
+      {confirmModal.isOpen && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(2, 6, 23, 0.75)',
+          backdropFilter: 'blur(8px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 100000,
+          padding: '20px'
+        }}>
+          <div style={{
+            background: 'var(--bg-card)',
+            border: '1px solid var(--bg-card-border)',
+            borderRadius: 'var(--radius-lg)',
+            padding: '24px',
+            maxWidth: '420px',
+            width: '100%',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4)',
+            animation: 'toast-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+          }}>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#FFF', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <ChevronRight size={18} color="var(--primary)" />
+              {lang === 'vi' ? 'Xác Nhận' : 'Confirmation'}
+            </h3>
+            <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.5', marginBottom: '24px' }}>
+              {confirmModal.message}
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              <button 
+                onClick={confirmModal.onCancel}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: 'var(--radius-sm)',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  color: 'var(--text-secondary)',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
+              >
+                {lang === 'vi' ? 'Hủy' : 'Cancel'}
+              </button>
+              <button 
+                onClick={confirmModal.onConfirm}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: 'var(--radius-sm)',
+                  background: 'rgba(0, 240, 255, 0.1)',
+                  border: '1px solid rgba(0, 240, 255, 0.3)',
+                  color: 'var(--primary)',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = 'rgba(0, 240, 255, 0.18)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'rgba(0, 240, 255, 0.1)'}
+              >
+                {lang === 'vi' ? 'Đồng Ý' : 'Confirm'}
+              </button>
             </div>
           </div>
         </div>
