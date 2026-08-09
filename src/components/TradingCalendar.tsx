@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Plus, X, Trash2, TrendingUp, TrendingDown, DollarSign, BarChart2, Calendar } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, X, Trash2, TrendingUp, TrendingDown, DollarSign, BarChart2, Calendar, Code } from 'lucide-react';
 
 export interface TradeEntry {
   id: string;
@@ -22,8 +22,19 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
     catch { return []; }
   });
   const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
+  
+  // Trade detail states
   const [pnl, setPnl] = useState<number>(0);
   const [notes, setNotes] = useState('');
+  const [asset, setAsset] = useState('');
+  const [direction, setDirection] = useState<'LONG' | 'SHORT'>('LONG');
+  const [setup, setSetup] = useState('');
+
+  // AI Copilot states
+  const [aiText, setAiText] = useState('');
+  const [isParsing, setIsParsing] = useState(false);
+  const [showAiConfig, setShowAiConfig] = useState(false);
+  const [geminiKey, setGeminiKey] = useState(() => localStorage.getItem('ict_gemini_api_key') || '');
 
   // Mobile layout state
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 960);
@@ -60,10 +71,130 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
   const winDays = new Set(monthTrades.filter(t => t.pnl > 0).map(t => t.date)).size;
   const lossDays = new Set(monthTrades.filter(t => t.pnl < 0).map(t => t.date)).size;
 
+  // Local AI parser backup
+  const parseLocally = (text: string) => {
+    const lower = text.toLowerCase();
+    
+    // 1. Direction detection
+    let dir: 'LONG' | 'SHORT' = 'LONG';
+    if (lower.includes('short') || lower.includes('sell') || lower.includes('bán') || lower.includes('sọc') || lower.includes('shorted') || lower.includes('giảm')) {
+      dir = 'SHORT';
+    }
+    setDirection(dir);
+
+    // 2. Asset detection
+    const assets = ['BTC', 'ETH', 'GOLD', 'XAUUSD', 'EURUSD', 'GBPUSD', 'NQ', 'ES', 'US30', 'NASDAQ', 'SPX', 'COIN'];
+    let matchedAsset = '';
+    for (const a of assets) {
+      const regex = new RegExp(`\\b${a}\\b`, 'i');
+      if (regex.test(text)) {
+        matchedAsset = a;
+        break;
+      }
+    }
+    if (matchedAsset) setAsset(matchedAsset.toUpperCase());
+
+    // 3. Setup detection
+    const setups = ['OTE', 'FVG', 'BREAKER', 'MITIGATION', 'SILVER BULLET', 'KILLZONE', 'ORDERBLOCK', 'OB'];
+    let matchedSetup = '';
+    for (const s of setups) {
+      const regex = new RegExp(`\\b${s}\\b`, 'i');
+      if (regex.test(text)) {
+        matchedSetup = s;
+        break;
+      }
+    }
+    if (matchedSetup) setSetup(matchedSetup.toUpperCase());
+
+    // 4. PnL extraction (+1200$, thắng 500k, âm 300)
+    let extractedPnl = 0;
+    const isLoss = lower.includes('lỗ') || lower.includes('thua') || lower.includes('loss') || lower.includes('-');
+    const rawNumMatch = text.replace(/-\s*/, '').match(/\d+(\.\d+)?/);
+    
+    if (rawNumMatch) {
+      let val = parseFloat(rawNumMatch[0]);
+      const kMatch = text.match(/\d+(\.\d+)?k/i);
+      if (kMatch) val = val * 1000;
+      extractedPnl = isLoss ? -val : val;
+    }
+    
+    if (extractedPnl) setPnl(extractedPnl);
+
+    // 5. Notes
+    setNotes(text);
+  };
+
+  const handleAiParse = async () => {
+    if (!aiText.trim()) return;
+    setIsParsing(true);
+
+    if (geminiKey.trim()) {
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `Analyze this trading journal entry text and extract the details in JSON format:
+                "${aiText}"
+
+                Response MUST follow this strict JSON schema (no markdown formatting, no backticks, just raw JSON):
+                {
+                  "asset": string (e.g. "NQ", "GOLD", "BTC", uppercase),
+                  "direction": "LONG" | "SHORT" (default to "LONG" if not specified),
+                  "setup": string (e.g. "OTE", "FVG", "Breaker", etc., max 2 words),
+                  "pnl": number (positive for profit, negative for loss. Extract from expressions like "+500", "lời 2k" -> 2000, "lỗ 300$" -> -300),
+                  "notes": string (brief summary of notes/reflection)
+                }`
+              }]
+            }],
+            generationConfig: {
+              responseMimeType: "application/json"
+            }
+          })
+        });
+
+        if (!res.ok) throw new Error('Gemini request failed');
+        const data = await res.json();
+        const jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (jsonText) {
+          const parsed = JSON.parse(jsonText.trim());
+          if (parsed.asset) setAsset(parsed.asset.toUpperCase());
+          if (parsed.direction) setDirection(parsed.direction);
+          if (parsed.setup) setSetup(parsed.setup.toUpperCase());
+          if (parsed.pnl !== undefined) setPnl(parsed.pnl);
+          if (parsed.notes) setNotes(parsed.notes);
+        }
+      } catch (err) {
+        console.error('Gemini API parse failed, using local parser:', err);
+        parseLocally(aiText);
+      }
+    } else {
+      parseLocally(aiText);
+    }
+    setIsParsing(false);
+  };
+
   const handleAdd = () => {
     if (!selectedDateStr || pnl === 0) return;
-    setTrades(prev => [...prev, { id: Date.now().toString(), date: selectedDateStr, asset: '', direction: 'LONG', setup: '', pnl, notes }]);
-    setPnl(0); setNotes('');
+    setTrades(prev => [...prev, { 
+      id: Date.now().toString(), 
+      date: selectedDateStr, 
+      asset: asset.toUpperCase().trim(), 
+      direction, 
+      setup: setup.toUpperCase().trim(), 
+      pnl, 
+      notes 
+    }]);
+    
+    // Reset form states
+    setPnl(0); 
+    setNotes(''); 
+    setAsset(''); 
+    setSetup(''); 
+    setDirection('LONG');
+    setAiText('');
   };
 
   // Build weeks array
@@ -377,44 +508,200 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
             </div>
 
             {/* Form */}
-            <div style={{ padding: '18px 20px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ marginBottom: '10px', fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em' }}>
-                {lang === 'vi' ? 'THÊM MỤC MỚI' : 'NEW ENTRY'}
+            <div style={{ padding: '18px 20px', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              
+              {/* ══ AI COPILOT SECTION ══ */}
+              <div style={{ background: 'rgba(0, 240, 255, 0.03)', padding: '12px', borderRadius: 'var(--radius-md)', border: '1px solid rgba(0, 240, 255, 0.15)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.72rem', color: 'var(--primary)', fontWeight: 800, fontFamily: 'var(--font-mono)', letterSpacing: '0.05em' }}>
+                    <span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%', background: 'var(--primary)', boxShadow: '0 0 8px var(--primary)' }}></span>
+                    GEMINI AI ASSISTANT
+                  </div>
+                  <button onClick={() => setShowAiConfig(!showAiConfig)} style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '2px' }}>
+                    {geminiKey ? '🔑 Có Key' : '⚙️ Nhập Key'}
+                  </button>
+                </div>
+
+                {showAiConfig && (
+                  <div style={{ background: 'rgba(0,0,0,0.4)', padding: '10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '4px' }}>
+                    <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)' }}>CẤU HÌNH API KEY (Lưu cục bộ)</div>
+                    <input
+                      type="password"
+                      placeholder="Dán Gemini API Key vào đây..."
+                      value={geminiKey}
+                      onChange={e => {
+                        setGeminiKey(e.target.value);
+                        localStorage.setItem('ict_gemini_api_key', e.target.value);
+                      }}
+                      style={{ width: '100%', padding: '6px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.5)', color: '#FFF', fontSize: '0.72rem', outline: 'none' }}
+                    />
+                    <div style={{ fontSize: '0.58rem', color: 'var(--text-muted)', lineHeight: '1.3' }}>
+                      API Key được lưu bảo mật trong Trình duyệt của bạn. Lấy key miễn phí tại Google AI Studio.
+                    </div>
+                  </div>
+                )}
+
+                <textarea
+                  placeholder={lang === 'vi' ? "Nhập nhật ký tự do, ví dụ: 'Long NQ thắng 1200$ theo mô hình OTE quét SSL ngày hôm nay'..." : "Enter unstructured trade details..."}
+                  value={aiText}
+                  onChange={e => setAiText(e.target.value)}
+                  rows={3}
+                  style={{
+                    width: '100%', boxSizing: 'border-box',
+                    background: 'rgba(0,0,0,0.3)',
+                    border: '1px solid rgba(255,255,255,0.07)',
+                    color: '#FFF',
+                    padding: '8px 12px', borderRadius: '8px',
+                    fontSize: '0.8rem', outline: 'none', resize: 'none',
+                    lineHeight: '1.4'
+                  }}
+                />
+
+                <button 
+                  onClick={handleAiParse} 
+                  disabled={isParsing || !aiText.trim()} 
+                  style={{
+                    background: 'var(--primary-gradient)',
+                    border: 'none',
+                    color: '#000',
+                    padding: '8px',
+                    borderRadius: '8px',
+                    fontWeight: 800,
+                    fontSize: '0.75rem',
+                    cursor: (isParsing || !aiText.trim()) ? 'not-allowed' : 'pointer',
+                    opacity: (isParsing || !aiText.trim()) ? 0.6 : 1,
+                    transition: 'all 0.2s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  {isParsing ? (
+                    <span>{lang === 'vi' ? 'Đang phân tích...' : 'Analyzing...'}</span>
+                  ) : (
+                    <>
+                      <Code size={14} />
+                      <span>{lang === 'vi' ? 'Phân Tích & Tự Điền Lệnh' : 'Analyze & Autofill Trade'}</span>
+                    </>
+                  )}
+                </button>
               </div>
-              <input
-                type="number"
-                placeholder={lang === 'vi' ? 'Số tiền ($)  — âm nếu lỗ' : 'Amount ($) — negative if loss'}
-                value={pnl || ''}
-                onChange={e => setPnl(Number(e.target.value))}
-                onKeyDown={e => e.key === 'Enter' && handleAdd()}
-                autoFocus
-                style={{
-                  width: '100%', boxSizing: 'border-box',
-                  background: 'rgba(0,0,0,0.4)',
-                  border: `1px solid ${pnl > 0 ? 'rgba(0,240,255,0.35)' : pnl < 0 ? 'rgba(244,114,182,0.35)' : 'rgba(255,255,255,0.08)'}`,
-                  color: pnl > 0 ? 'var(--primary)' : pnl < 0 ? 'var(--pink)' : '#FFF',
-                  padding: '11px 14px', borderRadius: '8px',
-                  fontWeight: 900, fontSize: '1.25rem', textAlign: 'center',
-                  outline: 'none', marginBottom: '10px',
-                  fontFamily: 'var(--font-mono)',
-                  transition: 'border-color 0.2s, color 0.2s'
-                }}
-              />
-              <textarea
-                placeholder={lang === 'vi' ? 'Ghi chú... (Enter để lưu)' : 'Notes... (Enter to save)'}
-                value={notes}
-                onChange={e => setNotes(e.target.value)}
-                rows={2}
-                style={{
-                  width: '100%', boxSizing: 'border-box',
-                  background: 'rgba(0,0,0,0.3)',
-                  border: '1px solid rgba(255,255,255,0.07)',
-                  color: 'var(--text-primary)',
-                  padding: '10px 14px', borderRadius: '8px',
-                  fontSize: '0.88rem', outline: 'none', resize: 'none',
-                  marginBottom: '10px', lineHeight: '1.5'
-                }}
-              />
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '6px' }}>
+                <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em' }}>
+                  {lang === 'vi' ? 'CHI TIẾT LỆNH GIAO DỊCH' : 'TRADE DETAILS'}
+                </div>
+
+                {/* Direction Toggle & Asset Input */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '10px' }}>
+                  {/* Direction Toggle */}
+                  <div style={{ display: 'flex', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)', padding: '2px' }}>
+                    <button
+                      onClick={() => setDirection('LONG')}
+                      style={{
+                        flex: 1,
+                        background: direction === 'LONG' ? 'rgba(0, 240, 255, 0.15)' : 'transparent',
+                        border: 'none',
+                        borderRadius: '6px',
+                        color: direction === 'LONG' ? 'var(--primary)' : 'var(--text-secondary)',
+                        fontSize: '0.75rem',
+                        fontWeight: 800,
+                        padding: '6px 0',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      LONG
+                    </button>
+                    <button
+                      onClick={() => setDirection('SHORT')}
+                      style={{
+                        flex: 1,
+                        background: direction === 'SHORT' ? 'rgba(244, 114, 182, 0.15)' : 'transparent',
+                        border: 'none',
+                        borderRadius: '6px',
+                        color: direction === 'SHORT' ? 'var(--pink)' : 'var(--text-secondary)',
+                        fontSize: '0.75rem',
+                        fontWeight: 800,
+                        padding: '6px 0',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      SHORT
+                    </button>
+                  </div>
+
+                  {/* Asset Input */}
+                  <input
+                    type="text"
+                    placeholder="Asset (e.g. NQ, BTC)"
+                    value={asset}
+                    onChange={e => setAsset(e.target.value.toUpperCase())}
+                    style={{
+                      width: '100%', boxSizing: 'border-box',
+                      background: 'rgba(0,0,0,0.3)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      color: '#FFF',
+                      padding: '6px 12px', borderRadius: '8px',
+                      fontSize: '0.8rem', outline: 'none', fontWeight: 700
+                    }}
+                  />
+                </div>
+
+                {/* Setup & PnL Input */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '10px' }}>
+                  {/* Setup Input */}
+                  <input
+                    type="text"
+                    placeholder="Setup (e.g. OTE, FVG)"
+                    value={setup}
+                    onChange={e => setSetup(e.target.value.toUpperCase())}
+                    style={{
+                      width: '100%', boxSizing: 'border-box',
+                      background: 'rgba(0,0,0,0.3)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      color: '#FFF',
+                      padding: '6px 12px', borderRadius: '8px',
+                      fontSize: '0.8rem', outline: 'none', fontWeight: 700
+                    }}
+                  />
+
+                  {/* PnL Input */}
+                  <input
+                    type="number"
+                    placeholder={lang === 'vi' ? 'PnL ($) e.g. -200' : 'PnL ($) e.g. 1500'}
+                    value={pnl || ''}
+                    onChange={e => setPnl(Number(e.target.value))}
+                    style={{
+                      width: '100%', boxSizing: 'border-box',
+                      background: 'rgba(0,0,0,0.3)',
+                      border: `1px solid ${pnl > 0 ? 'rgba(0, 240, 255, 0.3)' : pnl < 0 ? 'rgba(244, 114, 182, 0.3)' : 'rgba(255,255,255,0.08)'}`,
+                      color: pnl > 0 ? 'var(--primary)' : pnl < 0 ? 'var(--pink)' : '#FFF',
+                      padding: '6px 12px', borderRadius: '8px',
+                      fontSize: '0.8rem', outline: 'none', fontWeight: 800, textAlign: 'center',
+                      fontFamily: 'var(--font-mono)'
+                    }}
+                  />
+                </div>
+
+                {/* Notes Input */}
+                <textarea
+                  placeholder={lang === 'vi' ? 'Ghi chú thêm...' : 'Additional notes...'}
+                  value={notes}
+                  onChange={e => setNotes(e.target.value)}
+                  rows={2}
+                  style={{
+                    width: '100%', boxSizing: 'border-box',
+                    background: 'rgba(0,0,0,0.3)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    color: 'var(--text-primary)',
+                    padding: '8px 12px', borderRadius: '8px',
+                    fontSize: '0.8rem', outline: 'none', resize: 'none',
+                    lineHeight: '1.4'
+                  }}
+                />
+              </div>
+
               <button onClick={handleAdd} disabled={pnl === 0} style={{
                 width: '100%',
                 background: pnl !== 0 ? (pnl > 0 ? 'rgba(0,240,255,0.08)' : 'rgba(244,114,182,0.08)') : 'rgba(255,255,255,0.02)',
@@ -422,10 +709,10 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
                 color: pnl !== 0 ? (pnl > 0 ? 'var(--primary)' : 'var(--pink)') : 'var(--text-muted)',
                 padding: '10px', borderRadius: '8px',
                 cursor: pnl !== 0 ? 'pointer' : 'not-allowed',
-                fontWeight: 700, fontSize: '0.88rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                transition: 'all 0.2s'
+                fontWeight: 800, fontSize: '0.82rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                transition: 'all 0.2s', marginTop: '6px'
               }}>
-                <Plus size={15}/> {lang === 'vi' ? 'Lưu Ngay' : 'Save Entry'}
+                <Plus size={15}/> {lang === 'vi' ? 'Lưu Lệnh Vào Nhật Ký' : 'Save Entry to Journal'}
               </button>
             </div>
 
@@ -442,16 +729,32 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
                   borderRadius: '8px', padding: '12px 14px',
                   borderLeft: `3px solid ${t.pnl >= 0 ? 'var(--primary)' : 'var(--pink)'}`
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: t.notes ? '6px' : 0 }}>
-                    <span style={{
-                      fontSize: '1rem', fontWeight: 900, fontFamily: 'var(--font-mono)',
-                      color: t.pnl >= 0 ? 'var(--primary)' : 'var(--pink)'
-                    }}>{fmt(t.pnl)}</span>
-                    <button onClick={() => setTrades(prev => prev.filter(x => x.id !== t.id))} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.15)', cursor: 'pointer', padding: '2px', display: 'flex', transition: 'color 0.2s' }}>
-                      <Trash2 size={14}/>
-                    </button>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{
+                        fontSize: '0.62rem', fontWeight: 800,
+                        background: t.direction === 'LONG' ? 'rgba(0, 240, 255, 0.12)' : 'rgba(244, 114, 182, 0.12)',
+                        color: t.direction === 'LONG' ? 'var(--primary)' : 'var(--pink)',
+                        padding: '2px 5px', borderRadius: '4px', fontFamily: 'var(--font-mono)'
+                      }}>{t.direction}</span>
+                      {t.asset && (
+                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#FFF' }}>{t.asset}</span>
+                      )}
+                      {t.setup && (
+                        <span style={{ fontSize: '0.68rem', color: 'var(--text-secondary)', background: 'rgba(255,255,255,0.04)', padding: '2px 5px', borderRadius: '4px' }}>{t.setup}</span>
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{
+                        fontSize: '0.92rem', fontWeight: 900, fontFamily: 'var(--font-mono)',
+                        color: t.pnl >= 0 ? 'var(--primary)' : 'var(--pink)'
+                      }}>{fmt(t.pnl)}</span>
+                      <button onClick={() => setTrades(prev => prev.filter(x => x.id !== t.id))} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.15)', cursor: 'pointer', padding: '2px', display: 'flex', transition: 'color 0.2s' }}>
+                        <Trash2 size={14}/>
+                      </button>
+                    </div>
                   </div>
-                  {t.notes && <p style={{ margin: 0, fontSize: '0.83rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>{t.notes}</p>}
+                  {t.notes && <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>{t.notes}</p>}
                 </div>
               ))}
             </div>

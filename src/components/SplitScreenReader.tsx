@@ -220,7 +220,7 @@ export const SplitScreenReader: React.FC<SplitScreenReaderProps> = ({
         
         {/* LEFT COLUMN: Direct Embedded PDF Document */}
         <div className="glass-card split-pane" style={{ width: `calc(${leftWidth}% - 6px)`, padding: '8px', display: 'flex', flexDirection: 'column', gap: '6px', height: '100%', transition: isDragging ? 'none' : 'width 0.3s cubic-bezier(0.16, 1, 0.3, 1)', willChange: 'width' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifycontent: 'space-between', paddingLeft: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '4px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 700, color: '#FFF' }}>
               <FileText size={16} color="var(--primary)" />
               <span>{lang === 'vi' ? 'Tài Liệu File PDF Gốc' : 'Original PDF Document'}</span>
