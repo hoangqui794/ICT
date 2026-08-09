@@ -22,6 +22,5 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 
-# Large binary assets (not needed in repo)
+# Large PNG assets extracted from PDFs (not needed)
 public/pdf_assets/
-public/pdfs/
