@@ -25,6 +25,15 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
   const [pnl, setPnl] = useState<number>(0);
   const [notes, setNotes] = useState('');
 
+  // Mobile layout state
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 960);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 960);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     try { localStorage.setItem('ict_trading_journal', JSON.stringify(trades)); }
     catch { /* ignore */ }
@@ -74,12 +83,31 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
   const dayNames = lang === 'vi' ? DAYS_VI : DAYS_EN;
 
   return (
-    <div style={{ padding: '20px 28px', width: '100%', height: 'calc(100vh - 90px)', display: 'flex', flexDirection: 'column', gap: '16px', boxSizing: 'border-box' }}>
+    <div style={{ 
+      padding: isMobile ? '10px' : '20px 28px', 
+      width: '100%', 
+      height: isMobile ? 'auto' : 'calc(100vh - 90px)', 
+      display: 'flex', 
+      flexDirection: 'column', 
+      gap: isMobile ? '12px' : '16px', 
+      boxSizing: 'border-box',
+      paddingBottom: isMobile ? '40px' : '0'
+    }}>
 
       {/* ═══ TOP STATS BAR ═══ */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '16px', alignItems: 'center' }}>
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: isMobile ? 'column' : 'row', 
+        justifyContent: 'space-between', 
+        gap: '12px', 
+        alignItems: isMobile ? 'stretch' : 'center' 
+      }}>
         {/* Stats cards */}
-        <div style={{ display: 'flex', gap: '12px' }}>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', 
+          gap: isMobile ? '8px' : '12px' 
+        }}>
           {/* Monthly PnL */}
           <div style={{
             background: monthlyPnl >= 0
@@ -87,19 +115,18 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
               : 'linear-gradient(135deg, rgba(244,114,182,0.08) 0%, rgba(244,114,182,0.03) 100%)',
             border: `1px solid ${monthlyPnl >= 0 ? 'rgba(0,240,255,0.2)' : 'rgba(244,114,182,0.2)'}`,
             borderRadius: 'var(--radius-md)',
-            padding: '14px 20px',
-            display: 'flex', alignItems: 'center', gap: '12px',
-            minWidth: '180px'
+            padding: isMobile ? '8px 12px' : '14px 20px',
+            display: 'flex', alignItems: 'center', gap: isMobile ? '8px' : '12px',
           }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: monthlyPnl >= 0 ? 'rgba(0,240,255,0.1)' : 'rgba(244,114,182,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <DollarSign size={18} color={monthlyPnl >= 0 ? 'var(--primary)' : 'var(--pink)'} />
+            <div style={{ width: isMobile ? '28px' : '36px', height: isMobile ? '28px' : '36px', borderRadius: '50%', background: monthlyPnl >= 0 ? 'rgba(0,240,255,0.1)' : 'rgba(244,114,182,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <DollarSign size={isMobile ? 14 : 18} color={monthlyPnl >= 0 ? 'var(--primary)' : 'var(--pink)'} />
             </div>
             <div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', marginBottom: '2px' }}>
+              <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', marginBottom: '2px' }}>
                 {lang === 'vi' ? 'THÁNG NÀY' : 'THIS MONTH'}
               </div>
               <div style={{
-                fontSize: '1.3rem', fontWeight: 900, fontFamily: 'var(--font-mono)',
+                fontSize: isMobile ? '0.95rem' : '1.3rem', fontWeight: 900, fontFamily: 'var(--font-mono)',
                 color: monthlyPnl >= 0 ? 'var(--primary)' : 'var(--pink)',
                 textShadow: `0 0 16px ${monthlyPnl >= 0 ? 'rgba(0,240,255,0.4)' : 'rgba(244,114,182,0.4)'}`
               }}>
@@ -108,67 +135,85 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
             </div>
           </div>
           {/* Win days */}
-          <div style={{ background: 'rgba(0,255,157,0.05)', border: '1px solid rgba(0,255,157,0.15)', borderRadius: 'var(--radius-md)', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(0,255,157,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <TrendingUp size={18} color="var(--emerald)" />
+          <div style={{ background: 'rgba(0,255,157,0.05)', border: '1px solid rgba(0,255,157,0.15)', borderRadius: 'var(--radius-md)', padding: isMobile ? '8px 12px' : '14px 20px', display: 'flex', alignItems: 'center', gap: isMobile ? '8px' : '12px' }}>
+            <div style={{ width: isMobile ? '28px' : '36px', height: isMobile ? '28px' : '36px', borderRadius: '50%', background: 'rgba(0,255,157,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <TrendingUp size={isMobile ? 14 : 18} color="var(--emerald)" />
             </div>
             <div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', marginBottom: '2px' }}>{lang === 'vi' ? 'NGÀY LỜI' : 'WIN DAYS'}</div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 900, color: 'var(--emerald)', fontFamily: 'var(--font-mono)' }}>{winDays}</div>
+              <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', marginBottom: '2px' }}>{lang === 'vi' ? 'NGÀY LỜI' : 'WIN DAYS'}</div>
+              <div style={{ fontSize: isMobile ? '0.95rem' : '1.3rem', fontWeight: 900, color: 'var(--emerald)', fontFamily: 'var(--font-mono)' }}>{winDays}</div>
             </div>
           </div>
           {/* Loss days */}
-          <div style={{ background: 'rgba(244,114,182,0.05)', border: '1px solid rgba(244,114,182,0.15)', borderRadius: 'var(--radius-md)', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(244,114,182,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <TrendingDown size={18} color="var(--pink)" />
+          <div style={{ background: 'rgba(244,114,182,0.05)', border: '1px solid rgba(244,114,182,0.15)', borderRadius: 'var(--radius-md)', padding: isMobile ? '8px 12px' : '14px 20px', display: 'flex', alignItems: 'center', gap: isMobile ? '8px' : '12px' }}>
+            <div style={{ width: isMobile ? '28px' : '36px', height: isMobile ? '28px' : '36px', borderRadius: '50%', background: 'rgba(244,114,182,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <TrendingDown size={isMobile ? 14 : 18} color="var(--pink)" />
             </div>
             <div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', marginBottom: '2px' }}>{lang === 'vi' ? 'NGÀY LỖ' : 'LOSS DAYS'}</div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 900, color: 'var(--pink)', fontFamily: 'var(--font-mono)' }}>{lossDays}</div>
+              <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', marginBottom: '2px' }}>{lang === 'vi' ? 'NGÀY LỖ' : 'LOSS DAYS'}</div>
+              <div style={{ fontSize: isMobile ? '0.95rem' : '1.3rem', fontWeight: 900, color: 'var(--pink)', fontFamily: 'var(--font-mono)' }}>{lossDays}</div>
             </div>
           </div>
           {/* Total entries */}
-          <div style={{ background: 'rgba(185,0,255,0.05)', border: '1px solid rgba(185,0,255,0.15)', borderRadius: 'var(--radius-md)', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(185,0,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <BarChart2 size={18} color="var(--purple)" />
+          <div style={{ background: 'rgba(185,0,255,0.05)', border: '1px solid rgba(185,0,255,0.15)', borderRadius: 'var(--radius-md)', padding: isMobile ? '8px 12px' : '14px 20px', display: 'flex', alignItems: 'center', gap: isMobile ? '8px' : '12px' }}>
+            <div style={{ width: isMobile ? '28px' : '36px', height: isMobile ? '28px' : '36px', borderRadius: '50%', background: 'rgba(185,0,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <BarChart2 size={isMobile ? 14 : 18} color="var(--purple)" />
             </div>
             <div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', marginBottom: '2px' }}>{lang === 'vi' ? 'TỔNG LỢI' : 'ENTRIES'}</div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 900, color: 'var(--purple)', fontFamily: 'var(--font-mono)' }}>{monthTrades.length}</div>
+              <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', marginBottom: '2px' }}>{lang === 'vi' ? 'TỔNG LỢI' : 'ENTRIES'}</div>
+              <div style={{ fontSize: isMobile ? '0.95rem' : '1.3rem', fontWeight: 900, color: 'var(--purple)', fontFamily: 'var(--font-mono)' }}>{monthTrades.length}</div>
             </div>
           </div>
         </div>
 
         {/* Month Navigation */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <button onClick={() => setCurrentDate(new Date(year, month - 1, 1))} style={{ width: '36px', height: '36px', background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)', color: 'var(--text-secondary)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
-            <ChevronLeft size={18} />
-          </button>
-          <div style={{ textAlign: 'center', minWidth: '140px' }}>
-            <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.1em', marginBottom: '2px' }}>{year}</div>
-            <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#FFF' }}>{lang === 'vi' ? MONTHS_VI[month] : MONTHS_EN[month]}</div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginTop: isMobile ? '8px' : '0' }}>
+          <div style={{ display: 'flex', gap: '6px' }}>
+            <button onClick={() => setCurrentDate(new Date(year, month - 1, 1))} style={{ width: '32px', height: '32px', background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)', color: 'var(--text-secondary)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ChevronLeft size={16} />
+            </button>
+            <button onClick={() => setCurrentDate(new Date(year, month + 1, 1))} style={{ width: '32px', height: '32px', background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)', color: 'var(--text-secondary)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ChevronRight size={16} />
+            </button>
           </div>
-          <button onClick={() => setCurrentDate(new Date(year, month + 1, 1))} style={{ width: '36px', height: '36px', background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)', color: 'var(--text-secondary)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
-            <ChevronRight size={18} />
-          </button>
-          <button onClick={() => setCurrentDate(new Date())} style={{ padding: '6px 14px', background: 'rgba(0,240,255,0.05)', border: '1px solid rgba(0,240,255,0.25)', color: 'var(--primary)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700, transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <Calendar size={13} />{lang === 'vi' ? 'Hôm Nay' : 'Today'}
+          
+          <div style={{ textAlign: 'center', flex: 1, minWidth: '90px' }}>
+            <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.1em' }}>{year}</div>
+            <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#FFF' }}>{lang === 'vi' ? MONTHS_VI[month] : MONTHS_EN[month]}</div>
+          </div>
+
+          <button onClick={() => setCurrentDate(new Date())} style={{ padding: '6px 10px', background: 'rgba(0,240,255,0.05)', border: '1px solid rgba(0,240,255,0.25)', color: 'var(--primary)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <Calendar size={12} />{lang === 'vi' ? 'Hôm Nay' : 'Today'}
           </button>
         </div>
       </div>
 
       {/* ═══ CALENDAR GRID ═══ */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--bg-card-border)', minHeight: 0 }}>
+      <div style={{ 
+        flex: 1, 
+        display: 'flex', 
+        flexDirection: 'column', 
+        borderRadius: 'var(--radius-lg)', 
+        overflow: 'hidden', 
+        border: '1px solid var(--bg-card-border)', 
+        minHeight: isMobile ? '400px' : '0' 
+      }}>
         {/* Day Headers */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr) 110px', background: 'rgba(6,11,25,0.8)' }}>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: isMobile ? 'repeat(7, 1fr)' : 'repeat(7, 1fr) 110px', 
+          background: 'rgba(6,11,25,0.8)' 
+        }}>
           {dayNames.map((d, i) => (
-            <div key={d} style={{ padding: '10px 0', textAlign: 'center', fontSize: '0.72rem', fontWeight: 700, color: i >= 5 ? 'rgba(244,114,182,0.7)' : 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', borderBottom: '1px solid var(--bg-card-border)', borderRight: '1px solid var(--bg-card-border)' }}>
+            <div key={d} style={{ padding: '8px 0', textAlign: 'center', fontSize: '0.68rem', fontWeight: 700, color: i >= 5 ? 'rgba(244,114,182,0.7)' : 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', borderBottom: '1px solid var(--bg-card-border)', borderRight: '1px solid var(--bg-card-border)' }}>
               {d}
             </div>
           ))}
-          <div style={{ padding: '10px 0', textAlign: 'center', fontSize: '0.72rem', fontWeight: 800, color: 'var(--primary)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', borderBottom: '1px solid var(--bg-card-border)', background: 'rgba(0,240,255,0.03)' }}>
-            {lang === 'vi' ? 'TUẦN' : 'WEEK'}
-          </div>
+          {!isMobile && (
+            <div style={{ padding: '10px 0', textAlign: 'center', fontSize: '0.72rem', fontWeight: 800, color: 'var(--primary)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', borderBottom: '1px solid var(--bg-card-border)', background: 'rgba(0,240,255,0.03)' }}>
+              {lang === 'vi' ? 'TUẦN' : 'WEEK'}
+            </div>
+          )}
         </div>
 
         {/* Calendar Weeks */}
@@ -179,7 +224,12 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
               return s + getDayPnl(`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`);
             }, 0);
             return (
-              <div key={wi} style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr) 110px', flex: 1, borderBottom: wi < weeks.length - 1 ? '1px solid var(--bg-card-border)' : 'none' }}>
+              <div key={wi} style={{ 
+                display: 'grid', 
+                gridTemplateColumns: isMobile ? 'repeat(7, 1fr)' : 'repeat(7, 1fr) 110px', 
+                flex: 1, 
+                borderBottom: wi < weeks.length - 1 ? '1px solid var(--bg-card-border)' : 'none' 
+              }}>
                 {wk.map((d, di) => {
                   if (!d) return (
                     <div key={`e${wi}-${di}`} style={{ borderRight: '1px solid var(--bg-card-border)', background: 'rgba(0,0,0,0.2)' }} />
@@ -192,26 +242,41 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
                   const isWeekend = di >= 5;
 
                   let cellBg = 'transparent';
-                  if (isSel) cellBg = 'rgba(0,240,255,0.06)';
+                  if (isSel) cellBg = 'rgba(0,240,255,0.08)';
                   else if (dayPnl > 0) cellBg = 'rgba(0,240,255,0.03)';
                   else if (dayPnl < 0) cellBg = 'rgba(244,114,182,0.03)';
                   else if (isWeekend) cellBg = 'rgba(0,0,0,0.1)';
 
                   return (
                     <div key={ds} onClick={() => setSelectedDateStr(ds)}
-                      style={{ borderRight: '1px solid var(--bg-card-border)', padding: '10px', cursor: 'pointer', background: cellBg, display: 'flex', flexDirection: 'column', gap: '6px', transition: 'background 0.2s', position: 'relative' }}>
+                      style={{ 
+                        borderRight: '1px solid var(--bg-card-border)', 
+                        padding: isMobile ? '6px 4px' : '10px', 
+                        cursor: 'pointer', 
+                        background: cellBg, 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        gap: isMobile ? '4px' : '6px', 
+                        transition: 'background 0.2s', 
+                        position: 'relative',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        minHeight: isMobile ? '55px' : 'auto'
+                      }}>
                       
                       {/* Day number */}
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span style={{
-                          width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          borderRadius: '50%', fontSize: '0.9rem', fontWeight: 800,
+                          width: isMobile ? '20px' : '28px', 
+                          height: isMobile ? '20px' : '28px', 
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          borderRadius: '50%', fontSize: isMobile ? '0.75rem' : '0.9rem', fontWeight: 800,
                           background: isToday ? 'var(--primary)' : 'transparent',
                           color: isToday ? 'var(--bg-deep)' : isWeekend ? 'rgba(244,114,182,0.5)' : 'rgba(255,255,255,0.4)',
                           boxShadow: isToday ? '0 0 14px rgba(0,240,255,0.7)' : 'none',
                           flexShrink: 0
                         }}>{d}</span>
-                        {count > 0 && (
+                        {count > 0 && !isMobile && (
                           <div style={{ display: 'flex', gap: '3px', marginTop: '4px' }}>
                             {Array.from({ length: Math.min(count, 3) }).map((_, i) => (
                               <div key={i} style={{ width: '5px', height: '5px', borderRadius: '50%', background: dayPnl >= 0 ? 'var(--primary)' : 'var(--pink)', boxShadow: `0 0 4px ${dayPnl >= 0 ? 'var(--primary)' : 'var(--pink)'}` }} />
@@ -224,47 +289,52 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
                       {dayPnl !== 0 && (
                         <div style={{
                           marginTop: 'auto',
-                          padding: '3px 7px',
+                          padding: isMobile ? '1px 2px' : '3px 7px',
                           borderRadius: '4px',
                           background: dayPnl > 0 ? 'rgba(0,240,255,0.08)' : 'rgba(244,114,182,0.08)',
                           border: `1px solid ${dayPnl > 0 ? 'rgba(0,240,255,0.2)' : 'rgba(244,114,182,0.2)'}`,
-                          fontSize: '0.78rem', fontWeight: 800, fontFamily: 'var(--font-mono)',
+                          fontSize: isMobile ? '0.58rem' : '0.78rem', fontWeight: 800, fontFamily: 'var(--font-mono)',
                           color: dayPnl > 0 ? 'var(--primary)' : 'var(--pink)',
                           textAlign: 'center',
-                          textShadow: `0 0 8px ${dayPnl > 0 ? 'rgba(0,240,255,0.4)' : 'rgba(244,114,182,0.4)'}`
+                          width: '100%',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis'
                         }}>
-                          {fmt(dayPnl)}
+                          {isMobile ? (dayPnl > 0 ? `+$${Math.round(dayPnl/100)/10}k` : `-$${Math.round(Math.abs(dayPnl)/100)/10}k`).replace('.0k', 'k') : fmt(dayPnl)}
                         </div>
                       )}
                     </div>
                   );
                 })}
 
-                {/* Weekly Summary */}
-                <div style={{
-                  background: 'rgba(0,240,255,0.02)',
-                  borderLeft: '1px solid rgba(0,240,255,0.12)',
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px',
-                  padding: '8px'
-                }}>
-                  {weekPnl !== 0 ? (
-                    <>
-                      <div style={{ color: weekPnl > 0 ? 'var(--primary)' : 'var(--pink)', opacity: 0.7 }}>
-                        {weekPnl > 0 ? <TrendingUp size={14}/> : <TrendingDown size={14}/>}
-                      </div>
-                      <div style={{
-                        fontSize: '0.82rem', fontWeight: 800, fontFamily: 'var(--font-mono)',
-                        color: weekPnl > 0 ? 'var(--primary)' : 'var(--pink)',
-                        textShadow: `0 0 10px ${weekPnl > 0 ? 'rgba(0,240,255,0.4)' : 'rgba(244,114,182,0.4)'}`,
-                        textAlign: 'center'
-                      }}>
-                        {fmt(weekPnl)}
-                      </div>
-                    </>
-                  ) : (
-                    <span style={{ color: 'rgba(255,255,255,0.08)', fontSize: '1.2rem', lineHeight: 1 }}>—</span>
-                  )}
-                </div>
+                {/* Weekly Summary (Desktop Only) */}
+                {!isMobile && (
+                  <div style={{
+                    background: 'rgba(0,240,255,0.02)',
+                    borderLeft: '1px solid rgba(0,240,255,0.12)',
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px',
+                    padding: '8px'
+                  }}>
+                    {weekPnl !== 0 ? (
+                      <>
+                        <div style={{ color: weekPnl > 0 ? 'var(--primary)' : 'var(--pink)', opacity: 0.7 }}>
+                          {weekPnl > 0 ? <TrendingUp size={14}/> : <TrendingDown size={14}/>}
+                        </div>
+                        <div style={{
+                          fontSize: '0.82rem', fontWeight: 800, fontFamily: 'var(--font-mono)',
+                          color: weekPnl > 0 ? 'var(--primary)' : 'var(--pink)',
+                          textShadow: `0 0 10px ${weekPnl > 0 ? 'rgba(0,240,255,0.4)' : 'rgba(244,114,182,0.4)'}`,
+                          textAlign: 'center'
+                        }}>
+                          {fmt(weekPnl)}
+                        </div>
+                      </>
+                    ) : (
+                      <span style={{ color: 'rgba(255,255,255,0.08)', fontSize: '1.2rem', lineHeight: 1 }}>—</span>
+                    )}
+                  </div>
+                )}
               </div>
             );
           })}
@@ -276,7 +346,8 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
         <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex' }} onClick={() => setSelectedDateStr(null)}>
           <div style={{ flex: 1, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)' }} />
           <div onClick={e => e.stopPropagation()} style={{
-            width: '360px',
+            width: isMobile ? '100%' : '360px',
+            maxWidth: '360px',
             background: 'linear-gradient(160deg, #0D1635 0%, #060B19 100%)',
             borderLeft: '1px solid rgba(0,240,255,0.2)',
             display: 'flex', flexDirection: 'column',
