@@ -266,47 +266,70 @@ Response MUST follow this strict JSON schema (no markdown formatting, no backtic
         });
       }
 
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts }],
-          generationConfig: {
-            responseMimeType: "application/json"
-          }
-        })
-      });
+      const modelsToTry = [
+        'gemini-3.6-flash',
+        'gemini-3.5-flash',
+        'gemini-3-flash',
+        'gemini-2.5-flash',
+        'gemini-1.5-flash'
+      ];
+      let success = false;
+      let lastError: any = null;
 
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        const errMsg = errData.error?.message || `HTTP error ${res.status}`;
-        throw new Error(errMsg);
+      for (const modelName of modelsToTry) {
+        try {
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts }],
+              generationConfig: {
+                responseMimeType: "application/json"
+              }
+            })
+          });
+
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            const errMsg = errData.error?.message || `HTTP error ${res.status}`;
+            throw new Error(errMsg);
+          }
+
+          const data = await res.json();
+          const jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (jsonText) {
+            const parsed = JSON.parse(jsonText.trim());
+            if (parsed.asset) setAsset(parsed.asset.toUpperCase());
+            if (parsed.direction) setDirection(parsed.direction);
+            if (parsed.setup) setSetup(parsed.setup.toUpperCase());
+            if (parsed.pnl !== undefined) setPnl(parsed.pnl);
+            if (parsed.tradesCount !== undefined) setTradesCount(parsed.tradesCount);
+            if (parsed.lots !== undefined) setLots(parsed.lots);
+            if (parsed.notes) setNotes(parsed.notes);
+            success = true;
+            break;
+          }
+        } catch (err: any) {
+          console.warn(`Gemini API parse failed for ${modelName}:`, err);
+          lastError = err;
+        }
       }
-      const data = await res.json();
-      const jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (jsonText) {
-        const parsed = JSON.parse(jsonText.trim());
-        if (parsed.asset) setAsset(parsed.asset.toUpperCase());
-        if (parsed.direction) setDirection(parsed.direction);
-        if (parsed.setup) setSetup(parsed.setup.toUpperCase());
-        if (parsed.pnl !== undefined) setPnl(parsed.pnl);
-        if (parsed.tradesCount !== undefined) setTradesCount(parsed.tradesCount);
-        if (parsed.lots !== undefined) setLots(parsed.lots);
-        if (parsed.notes) setNotes(parsed.notes);
+
+      if (!success) {
+        const errMsg = lastError?.message || lastError || 'Unknown error';
+        if (hasText) {
+          alert(lang === 'vi' 
+            ? `Không thể phân tích bằng AI (${errMsg}). Đang sử dụng bộ phân tích cục bộ.` 
+            : `Could not parse with AI (${errMsg}). Falling back to local parser.`);
+          parseLocally(aiText);
+        } else {
+          alert(lang === 'vi'
+            ? `Không thể kết nối đến các model Gemini API hoặc dữ liệu ảnh không hợp lệ.\nChi tiết: ${errMsg}`
+            : `Failed to connect to Gemini API models or invalid image data.\nDetails: ${errMsg}`);
+        }
       }
     } catch (err: any) {
-      console.error('Gemini API parse failed:', err);
-      const errMsg = err?.message || err;
-      if (hasText) {
-        alert(lang === 'vi' 
-          ? `Không thể phân tích bằng AI (${errMsg}). Đang sử dụng bộ phân tích cục bộ.` 
-          : `Could not parse with AI (${errMsg}). Falling back to local parser.`);
-        parseLocally(aiText);
-      } else {
-        alert(lang === 'vi'
-          ? `Không thể kết nối đến Gemini API hoặc dữ liệu ảnh không hợp lệ.\nChi tiết: ${errMsg}`
-          : `Failed to connect to Gemini API or invalid image data.\nDetails: ${errMsg}`);
-      }
+      console.error('Fatal parser error:', err);
     } finally {
       setIsParsing(false);
     }
