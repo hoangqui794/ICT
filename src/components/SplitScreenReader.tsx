@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Topic, Module } from '../data/curriculumData';
-import { Youtube, FileText, GripVertical, Lightbulb, X } from 'lucide-react';
+import { Youtube, FileText, GripVertical, Lightbulb, X, ExternalLink } from 'lucide-react';
 
 interface SplitScreenReaderProps {
   topic: Topic;
@@ -24,6 +24,18 @@ export const SplitScreenReader: React.FC<SplitScreenReaderProps> = ({
   const [leftWidth, setLeftWidth] = useState(50); // percentage
   const [isDragging, setIsDragging] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
+  
+  // Mobile responsive states
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 960);
+  const [mobileTab, setMobileTab] = useState<'video' | 'pdf' | 'summary'>('video');
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 960);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     let animationFrameId: number;
@@ -58,6 +70,139 @@ export const SplitScreenReader: React.FC<SplitScreenReaderProps> = ({
     };
   }, [isDragging]);
 
+  // Mobile layout
+  if (isMobile) {
+    return (
+      <div className="mobile-lesson-viewer" style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', minHeight: 'calc(100vh - 180px)' }}>
+        {/* Mobile Navigation Tabs */}
+        <div className="tab-row" style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(10, 17, 40, 0.6)', padding: '6px', borderRadius: '30px', border: '1px solid var(--bg-card-border)' }}>
+          <button
+            className={`tab-btn ${mobileTab === 'video' ? 'active' : ''}`}
+            onClick={() => setMobileTab('video')}
+            style={{ flex: 1, justifyContent: 'center', padding: '8px 12px' }}
+          >
+            <Youtube size={16} />
+            <span>Video</span>
+          </button>
+          <button
+            className={`tab-btn ${mobileTab === 'pdf' ? 'active' : ''}`}
+            onClick={() => setMobileTab('pdf')}
+            style={{ flex: 1, justifyContent: 'center', padding: '8px 12px' }}
+          >
+            <FileText size={16} />
+            <span>Tài Liệu</span>
+          </button>
+          <button
+            className={`tab-btn ${mobileTab === 'summary' ? 'active' : ''}`}
+            onClick={() => setMobileTab('summary')}
+            style={{ flex: 1, justifyContent: 'center', padding: '8px 12px' }}
+          >
+            <Lightbulb size={16} />
+            <span>{lang === 'vi' ? 'Tóm Tắt' : 'Summary'}</span>
+          </button>
+        </div>
+
+        {/* Tab 1: Video */}
+        {mobileTab === 'video' && (
+          <div className="glass-card" style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 700, color: '#FFF' }}>
+              <Youtube size={16} color="#EF4444" />
+              <span>{lang === 'vi' ? 'Video Bài Giảng YouTube' : 'YouTube Tutorial'}</span>
+            </div>
+            {topic.youtubeVideoId ? (
+              <div style={{ width: '100%', aspectRatio: '16/9', position: 'relative', background: '#000', borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid rgba(239, 68, 68, 0.25)' }}>
+                <iframe
+                  src={`https://www.youtube.com/embed/${topic.youtubeVideoId}?autoplay=1&rel=0`}
+                  title={title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
+                />
+              </div>
+            ) : (
+              <div style={{ height: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
+                {lang === 'vi' ? 'Không có video bài học' : 'No video available'}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Tab 2: PDF Document */}
+        {mobileTab === 'pdf' && (
+          <div className="glass-card" style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 700, color: '#FFF' }}>
+                <FileText size={16} color="var(--primary)" />
+                <span>{lang === 'vi' ? 'Tài Liệu Học Tập' : 'Study Document'}</span>
+              </div>
+              <a
+                href={pdfUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="btn-primary"
+                style={{ fontSize: '0.75rem', padding: '4px 10px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+              >
+                <span>{lang === 'vi' ? 'Mở PDF' : 'Open PDF'}</span>
+                <ExternalLink size={12} />
+              </a>
+            </div>
+
+            <div style={{ width: '100%', height: '55vh', position: 'relative', background: '#000', borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
+              {/* iframe showing PDF */}
+              <iframe
+                src={`${pdfUrl}#toolbar=1&navpanes=0`}
+                title={topic.pdfFileName}
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Tab 3: Summary & Key Takeaways */}
+        {mobileTab === 'summary' && (
+          <div className="glass-card" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Lightbulb size={22} color="var(--primary)" />
+              <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#FFF', margin: 0 }}>
+                {lang === 'vi' ? 'Tóm Tắt Bài Học' : 'Lesson Summary'}
+              </h3>
+            </div>
+            
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5, margin: 0 }}>
+              {lang === 'vi' ? topic.descriptionVi : topic.descriptionEn}
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '4px' }}>
+              {(lang === 'vi' ? topic.keyTakeawaysVi : topic.keyTakeawaysEn).map((takeaway, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', background: 'rgba(255,255,255,0.02)', padding: '12px', borderRadius: 'var(--radius-md)', border: '1px solid rgba(255,255,255,0.04)' }}>
+                  <span style={{ 
+                    width: '20px', 
+                    height: '20px', 
+                    borderRadius: '50%', 
+                    background: 'rgba(0, 240, 255, 0.15)', 
+                    color: 'var(--primary)', 
+                    fontSize: '0.75rem',
+                    fontWeight: 800,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0
+                  }}>
+                    {idx + 1}
+                  </span>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-primary)', lineHeight: 1.4 }}>
+                    {takeaway}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Desktop layout
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', height: 'calc(100vh - 100px)' }}>
       {/* DUAL STUDIO: LEFT = RAW PDF FILE, RIGHT = EMBEDDED YOUTUBE VIDEO */}
@@ -75,7 +220,7 @@ export const SplitScreenReader: React.FC<SplitScreenReaderProps> = ({
         
         {/* LEFT COLUMN: Direct Embedded PDF Document */}
         <div className="glass-card split-pane" style={{ width: `calc(${leftWidth}% - 6px)`, padding: '8px', display: 'flex', flexDirection: 'column', gap: '6px', height: '100%', transition: isDragging ? 'none' : 'width 0.3s cubic-bezier(0.16, 1, 0.3, 1)', willChange: 'width' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifycontent: 'space-between', paddingLeft: '4px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 700, color: '#FFF' }}>
               <FileText size={16} color="var(--primary)" />
               <span>{lang === 'vi' ? 'Tài Liệu File PDF Gốc' : 'Original PDF Document'}</span>

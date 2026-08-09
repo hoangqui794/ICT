@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CURRICULUM_DATA, Topic, Module } from '../data/curriculumData';
 import { SplitScreenReader } from './SplitScreenReader';
-import { NativeLessonArticle } from './NativeLessonArticle';
-import { PdfEmbeddedViewer } from './PdfEmbeddedViewer';
-import { WebReaderViewer } from './WebReaderViewer';
 import { 
   FileText, 
   CheckSquare, 
@@ -12,12 +9,9 @@ import {
   BookOpen, 
   ChevronRight,
   ChevronDown,
-  Image as ImageIcon,
-  FileCode,
   PanelLeftClose,
   PanelLeftOpen,
-  Tv,
-  Youtube
+  X
 } from 'lucide-react';
 
 interface LessonViewerProps {
@@ -42,6 +36,26 @@ export const LessonViewer: React.FC<LessonViewerProps> = ({
   // Collapsible sidebar state
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
 
+  // Responsive state
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 960);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 960);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Collapse sidebar by default on mobile
+  useEffect(() => {
+    if (isMobile) {
+      setIsSidebarOpen(false);
+    } else {
+      setIsSidebarOpen(true);
+    }
+  }, [isMobile]);
+
   // Track open module accordions
   const [openModules, setOpenModules] = useState<Record<string, boolean>>({
     [selectedModuleId]: true
@@ -61,67 +75,83 @@ export const LessonViewer: React.FC<LessonViewerProps> = ({
   const title = lang === 'vi' ? activeTopic.titleVi : activeTopic.titleEn;
 
   return (
-    <div className="lesson-layout" style={{ gridTemplateColumns: isSidebarOpen ? '280px 1fr' : '1fr' }}>
+    <div className="lesson-layout" style={{ gridTemplateColumns: (!isMobile && isSidebarOpen) ? '280px 1fr' : '1fr' }}>
       {/* Sidebar Navigation */}
       {isSidebarOpen && (
-        <aside className="sidebar">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '4px', marginBottom: '4px' }}>
-            <div style={{ fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)' }}>
-              {lang === 'vi' ? 'Danh Mục Lộ Trình' : 'Curriculum Modules'}
-            </div>
-          </div>
-
-          {CURRICULUM_DATA.map((moduleItem) => {
-            const isOpen = openModules[moduleItem.id] ?? (moduleItem.id === selectedModuleId);
-            const modTitle = lang === 'vi' ? moduleItem.titleVi : moduleItem.titleEn;
-
-            return (
-              <div key={moduleItem.id} className="sidebar-accordion-group">
-                <button
-                  className="sidebar-accordion-header"
-                  onClick={() => toggleModule(moduleItem.id)}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span className="badge badge-blue" style={{ fontSize: '0.7rem', padding: '2px 8px' }}>
-                      {moduleItem.number}
-                    </span>
-                    <span>{modTitle}</span>
-                  </div>
-                  {isOpen ? <ChevronDown size={15} color="var(--text-muted)" /> : <ChevronRight size={15} color="var(--text-muted)" />}
-                </button>
-
-                {isOpen && (
-                  <div className="sidebar-accordion-body">
-                    {moduleItem.topics.map((topic) => {
-                      const isActive = topic.id === activeTopic.id;
-                      const topicTitle = lang === 'vi' ? topic.titleVi : topic.titleEn;
-                      const hasExercises = topic.practicalExercisesVi.length > 0;
-                      const isTopicDone = hasExercises && topic.practicalExercisesVi.every(ex => completedExercises[ex]);
-
-                      return (
-                        <button
-                          key={topic.id}
-                          className={`sidebar-item ${isActive ? 'active' : ''}`}
-                          onClick={() => onSelectTopic(moduleItem.id, topic.id)}
-                        >
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: 0 }}>
-                            <FileText size={14} style={{ flexShrink: 0 }} color={isActive ? 'var(--primary)' : 'var(--text-muted)'} />
-                            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              {topicTitle}
-                            </span>
-                          </div>
-                          {isTopicDone && (
-                            <CheckCircle2 size={14} color="var(--emerald)" style={{ flexShrink: 0 }} />
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
+        <>
+          {isMobile && <div className="sidebar-backdrop" onClick={() => setIsSidebarOpen(false)} />}
+          <aside className={`sidebar ${isMobile ? 'mobile-drawer open' : ''}`}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '4px', marginBottom: '8px' }}>
+              <div style={{ fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)' }}>
+                {lang === 'vi' ? 'Danh Mục Lộ Trình' : 'Curriculum Modules'}
               </div>
-            );
-          })}
-        </aside>
+              {isMobile && (
+                <button 
+                  onClick={() => setIsSidebarOpen(false)}
+                  style={{ color: 'var(--text-muted)', background: 'rgba(255,255,255,0.05)', border: 'none', borderRadius: '50%', padding: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  <X size={16} />
+                </button>
+              )}
+            </div>
+
+            {CURRICULUM_DATA.map((moduleItem) => {
+              const isOpen = openModules[moduleItem.id] ?? (moduleItem.id === selectedModuleId);
+              const modTitle = lang === 'vi' ? moduleItem.titleVi : moduleItem.titleEn;
+
+              return (
+                <div key={moduleItem.id} className="sidebar-accordion-group">
+                  <button
+                    className="sidebar-accordion-header"
+                    onClick={() => toggleModule(moduleItem.id)}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span className="badge badge-blue" style={{ fontSize: '0.7rem', padding: '2px 8px' }}>
+                        {moduleItem.number}
+                      </span>
+                      <span>{modTitle}</span>
+                    </div>
+                    {isOpen ? <ChevronDown size={15} color="var(--text-muted)" /> : <ChevronRight size={15} color="var(--text-muted)" />}
+                  </button>
+
+                  {isOpen && (
+                    <div className="sidebar-accordion-body">
+                      {moduleItem.topics.map((topic) => {
+                        const isActive = topic.id === activeTopic.id;
+                        const topicTitle = lang === 'vi' ? topic.titleVi : topic.titleEn;
+                        const hasExercises = topic.practicalExercisesVi.length > 0;
+                        const isTopicDone = hasExercises && topic.practicalExercisesVi.every(ex => completedExercises[ex]);
+
+                        return (
+                          <button
+                            key={topic.id}
+                            className={`sidebar-item ${isActive ? 'active' : ''}`}
+                            onClick={() => {
+                              onSelectTopic(moduleItem.id, topic.id);
+                              if (isMobile) {
+                                setIsSidebarOpen(false); // Auto close drawer on click
+                              }
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: 0 }}>
+                              <FileText size={14} style={{ flexShrink: 0 }} color={isActive ? 'var(--primary)' : 'var(--text-muted)'} />
+                              <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {topicTitle}
+                              </span>
+                            </div>
+                            {isTopicDone && (
+                              <CheckCircle2 size={14} color="var(--emerald)" style={{ flexShrink: 0 }} />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </aside>
+        </>
       )}
 
       {/* Main Workspace Area */}
@@ -142,12 +172,16 @@ export const LessonViewer: React.FC<LessonViewerProps> = ({
               title={isSidebarOpen ? (lang === 'vi' ? 'Ẩn Lộ Trình' : 'Hide Sidebar') : (lang === 'vi' ? 'Mở Lộ Trình' : 'Show Sidebar')}
             >
               {isSidebarOpen ? <PanelLeftClose size={15} /> : <PanelLeftOpen size={15} />}
-              <span>{isSidebarOpen ? (lang === 'vi' ? 'Ẩn Menu' : 'Hide Menu') : (lang === 'vi' ? 'Mở Danh Mục Lộ Trình' : 'Open Curriculum')}</span>
+              <span>{isSidebarOpen ? (lang === 'vi' ? 'Ẩn Lộ Trình' : 'Hide Sidebar') : (lang === 'vi' ? 'Danh Mục Lộ Trình' : 'Curriculum')}</span>
             </button>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              <span>{lang === 'vi' ? activeModule.titleVi : activeModule.titleEn}</span>
-              <ChevronRight size={14} />
+              {!isMobile && (
+                <>
+                  <span>{lang === 'vi' ? activeModule.titleVi : activeModule.titleEn}</span>
+                  <ChevronRight size={14} />
+                </>
+              )}
               <span style={{ color: 'var(--primary)', fontWeight: 700 }}>{title}</span>
             </div>
           </div>
@@ -159,7 +193,7 @@ export const LessonViewer: React.FC<LessonViewerProps> = ({
               onClick={() => setActiveWorkspaceTab('web-article')}
             >
               <BookOpen size={15} />
-              <span>{lang === 'vi' ? '📖 Học Chia 2 Cột' : '📖 Split Reader'}</span>
+              <span>{lang === 'vi' ? '📖 Học Tập' : '📖 Study'}</span>
             </button>
 
             <button
@@ -183,7 +217,7 @@ export const LessonViewer: React.FC<LessonViewerProps> = ({
           />
         )}
 
-
+        {/* View 2: Exercises */}
         {activeWorkspaceTab === 'exercises' && (
           <div className="glass-card article-section-card">
             <h3 className="article-heading">

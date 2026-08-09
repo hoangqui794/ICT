@@ -652,47 +652,140 @@ button {
   animation-delay: 0.15s;
 }
 
+/* Desktop vs Mobile visibility helpers */
+.desktop-only {
+  display: block;
+}
+header.desktop-only {
+  display: block;
+}
+.mobile-only {
+  display: none !important;
+}
+
 @media (max-width: 960px) {
+  .desktop-only {
+    display: none !important;
+  }
+  .mobile-only {
+    display: block !important;
+  }
+  nav.mobile-only {
+    display: flex !important;
+  }
+  header.mobile-only {
+    display: block !important;
+  }
+
   .main-content {
-    padding: 14px 12px 32px 12px;
+    padding: 10px 10px 80px 10px !important; /* Extra bottom padding for bottom nav */
   }
   .lesson-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
-  .sidebar {
-    position: static;
-    max-height: none;
+  
+  /* Sidebar Drawer Mobile Styling */
+  .sidebar.mobile-drawer {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 290px !important;
+    max-width: 85vw;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    z-index: 2000 !important;
+    background: var(--bg-dark) !important;
+    border-right: 1px solid var(--bg-card-border);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8) !important;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    padding: 16px !important;
+    margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
+  .sidebar.mobile-drawer.open {
+    transform: translateX(0) !important;
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1999;
+    animation: fade-in 0.2s ease-out;
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
   .sticky-diagram-panel {
     position: static;
     height: auto;
   }
 
   /* Responsive Navbar */
-  .navbar-inner {
-    flex-wrap: wrap;
-    justify-content: center;
+  .mobile-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+    background: rgba(6, 11, 25, 0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--bg-card-border);
+    width: 100%;
   }
-  .nav-links {
-    flex-wrap: wrap;
+  .mobile-navbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    height: 54px;
+  }
+
+  /* Mobile Bottom Nav */
+  .mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 62px;
+    background: rgba(6, 11, 25, 0.92);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--bg-card-border);
+    z-index: 1000;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-bottom: env(safe-area-inset-bottom);
+    box-shadow: 0 -4px 20px rgba(0, 240, 255, 0.1);
+  }
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    gap: 4px;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    font-size: 0.65rem;
+    font-weight: 500;
+    flex: 1;
+    height: 100%;
+    transition: all 0.2s ease;
+  }
+  .mobile-nav-item.active {
+    color: var(--primary);
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
   }
 
   /* Responsive Roadmap Grid */
   .roadmap-grid {
     grid-template-columns: 1fr;
-  }
-
-  /* Responsive Split Screen Reader */
-  .split-container {
-    flex-direction: column !important;
-    overflow-y: auto;
-  }
-  .split-pane {
-    width: 100% !important;
-    min-height: 50vh !important;
-  }
-  .split-divider {
-    display: none !important;
   }
 }
