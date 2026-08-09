@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Plus, X, Trash2, TrendingUp, TrendingDown, DollarSign, BarChart2, Calendar, Code } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, X, Trash2, TrendingUp, TrendingDown, DollarSign, BarChart2, Calendar, Code, Image, Upload, Download } from 'lucide-react';
 
 export interface TradeEntry {
   id: string;
@@ -9,6 +9,8 @@ export interface TradeEntry {
   setup: string;
   pnl: number;
   notes: string;
+  tradesCount?: number;
+  lots?: number;
 }
 
 interface TradingCalendarProps {
@@ -35,6 +37,16 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
   const [isParsing, setIsParsing] = useState(false);
   const [showAiConfig, setShowAiConfig] = useState(false);
   const [geminiKey, setGeminiKey] = useState(() => localStorage.getItem('ict_gemini_api_key') || '');
+
+  // Image Analysis states
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageBase64, setImageBase64] = useState<string | null>(null);
+  const [imageMimeType, setImageMimeType] = useState<string | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
+
+  // New Fields: Trades Count & Lots
+  const [tradesCount, setTradesCount] = useState<number>(1);
+  const [lots, setLots] = useState<number>(0);
 
   // Mobile layout state
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 960);
@@ -70,6 +82,8 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
   const monthlyPnl = monthTrades.reduce((s, t) => s + t.pnl, 0);
   const winDays = new Set(monthTrades.filter(t => t.pnl > 0).map(t => t.date)).size;
   const lossDays = new Set(monthTrades.filter(t => t.pnl < 0).map(t => t.date)).size;
+  const totalTradesCount = monthTrades.reduce((s, t) => s + (t.tradesCount || 1), 0);
+  const totalLotsCount = monthTrades.reduce((s, t) => s + ((t.tradesCount || 1) * (t.lots || 0)), 0);
 
   // Local AI parser backup
   const parseLocally = (text: string) => {
@@ -120,60 +134,148 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
     
     if (extractedPnl) setPnl(extractedPnl);
 
-    // 5. Notes
+    // 5. Trades count extraction (e.g. "3 lệnh", "2 trades")
+    let extractedTradesCount = 1;
+    const tradesMatch = text.match(/(\d+)\s*(lệnh|trade|vào lệnh|lệnh vào)/i);
+    if (tradesMatch) {
+      extractedTradesCount = parseInt(tradesMatch[1]);
+    }
+    setTradesCount(extractedTradesCount);
+
+    // 6. Lots extraction (e.g. "0.5 lot", "2 lots", "vào 1.2 lot")
+    let extractedLots = 0;
+    const lotsMatch = text.match(/(\d+(\.\d+)?)\s*(lot)/i);
+    if (lotsMatch) {
+      extractedLots = parseFloat(lotsMatch[1]);
+    }
+    setLots(extractedLots);
+
+    // 7. Notes
     setNotes(text);
   };
 
+  const handleImageSelection = (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      alert(lang === 'vi' ? 'Vui lòng chọn một tệp hình ảnh!' : 'Please select an image file!');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataUrl = e.target?.result as string;
+      setImagePreview(dataUrl);
+      setImageMimeType(file.type);
+      const base64Data = dataUrl.split(',')[1];
+      setImageBase64(base64Data);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const file = items[i].getAsFile();
+        if (file) {
+          handleImageSelection(file);
+          break;
+        }
+      }
+    }
+  };
+
   const handleAiParse = async () => {
-    if (!aiText.trim()) return;
+    const hasText = !!aiText.trim();
+    const hasImage = !!imageBase64;
+    if (!hasText && !hasImage) return;
+
+    if (!geminiKey.trim()) {
+      if (hasImage) {
+        alert(lang === 'vi' 
+          ? 'Phân tích hình ảnh yêu cầu Gemini API Key. Vui lòng cấu hình API Key ở mục trên.' 
+          : 'Image analysis requires a Gemini API Key. Please configure the API Key above.');
+        return;
+      }
+      parseLocally(aiText);
+      return;
+    }
+
     setIsParsing(true);
 
-    if (geminiKey.trim()) {
-      try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{
-              parts: [{
-                text: `Analyze this trading journal entry text and extract the details in JSON format:
-                "${aiText}"
+    try {
+      const notesLangInstruction = lang === 'vi' 
+        ? "MUST be in Vietnamese/Tiếng Việt, brief summary of notes/reflection of the trade setup and results"
+        : "MUST be in English, brief summary of notes/reflection of the trade setup and results";
 
-                Response MUST follow this strict JSON schema (no markdown formatting, no backticks, just raw JSON):
-                {
-                  "asset": string (e.g. "NQ", "GOLD", "BTC", uppercase),
-                  "direction": "LONG" | "SHORT" (default to "LONG" if not specified),
-                  "setup": string (e.g. "OTE", "FVG", "Breaker", etc., max 2 words),
-                  "pnl": number (positive for profit, negative for loss. Extract from expressions like "+500", "lời 2k" -> 2000, "lỗ 300$" -> -300),
-                  "notes": string (brief summary of notes/reflection)
-                }`
-              }]
-            }],
-            generationConfig: {
-              responseMimeType: "application/json"
-            }
-          })
-        });
+      let promptText = `Analyze this trading journal entry and extract the details in JSON format.
+Response MUST follow this strict JSON schema (no markdown formatting, no backticks, just raw JSON):
+{
+  "asset": string (e.g. "NQ", "GOLD", "BTC", uppercase),
+  "direction": "LONG" | "SHORT" (default to "LONG" if not specified),
+  "setup": string (e.g. "OTE", "FVG", "Breaker", etc., max 2 words),
+  "pnl": number (positive for profit, negative for loss. Extract from values like "+500", "lời 2k" -> 2000, "lỗ 300$" -> -300),
+  "tradesCount": number (number of positions/trades entered. Default to 1),
+  "lots": number (lots size per single trade. Default to 0),
+  "notes": string (${notesLangInstruction})
+}`;
 
-        if (!res.ok) throw new Error('Gemini request failed');
-        const data = await res.json();
-        const jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (jsonText) {
-          const parsed = JSON.parse(jsonText.trim());
-          if (parsed.asset) setAsset(parsed.asset.toUpperCase());
-          if (parsed.direction) setDirection(parsed.direction);
-          if (parsed.setup) setSetup(parsed.setup.toUpperCase());
-          if (parsed.pnl !== undefined) setPnl(parsed.pnl);
-          if (parsed.notes) setNotes(parsed.notes);
-        }
-      } catch (err) {
-        console.error('Gemini API parse failed, using local parser:', err);
-        parseLocally(aiText);
+      if (hasText) {
+        promptText += `\n\nUser text details:\n"${aiText}"`;
       }
-    } else {
-      parseLocally(aiText);
+      if (hasImage) {
+        promptText += `\n\nPlease also inspect the trading chart image provided to extract or verify the asset, direction (LONG/SHORT), setup (e.g. FVG, OTE, OB), PnL, number of trades/positions entered, lot size, and any visual clues.`;
+      }
+
+      const parts: any[] = [{ text: promptText }];
+
+      if (hasImage && imageBase64 && imageMimeType) {
+        parts.push({
+          inlineData: {
+            mimeType: imageMimeType,
+            data: imageBase64
+          }
+        });
+      }
+
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts }],
+          generationConfig: {
+            responseMimeType: "application/json"
+          }
+        })
+      });
+
+      if (!res.ok) throw new Error('Gemini request failed');
+      const data = await res.json();
+      const jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (jsonText) {
+        const parsed = JSON.parse(jsonText.trim());
+        if (parsed.asset) setAsset(parsed.asset.toUpperCase());
+        if (parsed.direction) setDirection(parsed.direction);
+        if (parsed.setup) setSetup(parsed.setup.toUpperCase());
+        if (parsed.pnl !== undefined) setPnl(parsed.pnl);
+        if (parsed.tradesCount !== undefined) setTradesCount(parsed.tradesCount);
+        if (parsed.lots !== undefined) setLots(parsed.lots);
+        if (parsed.notes) setNotes(parsed.notes);
+      }
+    } catch (err) {
+      console.error('Gemini API parse failed:', err);
+      if (hasText) {
+        alert(lang === 'vi' 
+          ? 'Không thể phân tích bằng AI. Đang sử dụng bộ phân tích cục bộ.' 
+          : 'Could not parse with AI. Falling back to local parser.');
+        parseLocally(aiText);
+      } else {
+        alert(lang === 'vi'
+          ? 'Không thể kết nối đến Gemini API hoặc dữ liệu ảnh không hợp lệ.'
+          : 'Failed to connect to Gemini API or invalid image data.');
+      }
+    } finally {
+      setIsParsing(false);
     }
-    setIsParsing(false);
   };
 
   const handleAdd = () => {
@@ -185,7 +287,9 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
       direction, 
       setup: setup.toUpperCase().trim(), 
       pnl, 
-      notes 
+      notes,
+      tradesCount,
+      lots
     }]);
     
     // Reset form states
@@ -195,6 +299,64 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
     setSetup(''); 
     setDirection('LONG');
     setAiText('');
+    setImagePreview(null);
+    setImageBase64(null);
+    setImageMimeType(null);
+    setTradesCount(1);
+    setLots(0);
+  };
+
+  const handleExport = () => {
+    try {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(trades, null, 2));
+      const downloadAnchorNode = document.createElement('a');
+      downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute("download", `ICT_Journal_${new Date().toISOString().split('T')[0]}.json`);
+      document.body.appendChild(downloadAnchorNode);
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
+    } catch (err) {
+      alert(lang === 'vi' ? 'Lỗi khi xuất file!' : 'Error exporting file!');
+    }
+  };
+
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try {
+        const importedData = JSON.parse(evt.target?.result as string);
+        if (Array.isArray(importedData)) {
+          const isValid = importedData.every(item => 
+            item && typeof item === 'object' && 'id' in item && 'date' in item && 'pnl' in item
+          );
+          if (!isValid) {
+            throw new Error('Định dạng tệp tin không hợp lệ');
+          }
+
+          const confirmMsg = lang === 'vi'
+            ? `Bạn có chắc muốn nhập ${importedData.length} bản ghi nhật ký? Hành động này sẽ gộp vào dữ liệu hiện có.`
+            : `Are you sure you want to import ${importedData.length} journal records? This will merge with existing data.`;
+          
+          if (window.confirm(confirmMsg)) {
+            setTrades(prev => {
+              const existingIds = new Set(prev.map(t => t.id));
+              const newTrades = importedData.filter(t => !existingIds.has(t.id));
+              return [...prev, ...newTrades];
+            });
+            alert(lang === 'vi' ? 'Nhập dữ liệu thành công!' : 'Data imported successfully!');
+          }
+        } else {
+          alert(lang === 'vi' ? 'File không chứa một danh sách hợp lệ!' : 'File does not contain a valid list!');
+        }
+      } catch (err) {
+        alert(lang === 'vi' ? 'Lỗi khi đọc file. Hãy chắc chắn đây là file JSON hợp lệ của nhật ký!' : 'Error reading file. Ensure it is a valid journal JSON file!');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
   };
 
   // Build weeks array
@@ -291,8 +453,12 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
               <BarChart2 size={isMobile ? 14 : 18} color="var(--purple)" />
             </div>
             <div>
-              <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', marginBottom: '2px' }}>{lang === 'vi' ? 'TỔNG LỢI' : 'ENTRIES'}</div>
-              <div style={{ fontSize: isMobile ? '0.95rem' : '1.3rem', fontWeight: 900, color: 'var(--purple)', fontFamily: 'var(--font-mono)' }}>{monthTrades.length}</div>
+              <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', marginBottom: '2px' }}>
+                {lang === 'vi' ? 'TỔNG LỆNH & LOTS' : 'TRADES & LOTS'}
+              </div>
+              <div style={{ fontSize: isMobile ? '0.8rem' : '1.1rem', fontWeight: 900, color: 'var(--purple)', fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>
+                {totalTradesCount} {lang === 'vi' ? 'lệnh' : 'trades'} ({Math.round(totalLotsCount * 100) / 100} lot)
+              </div>
             </div>
           </div>
         </div>
@@ -313,9 +479,62 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
             <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#FFF' }}>{lang === 'vi' ? MONTHS_VI[month] : MONTHS_EN[month]}</div>
           </div>
 
-          <button onClick={() => setCurrentDate(new Date())} style={{ padding: '6px 10px', background: 'rgba(0,240,255,0.05)', border: '1px solid rgba(0,240,255,0.25)', color: 'var(--primary)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Calendar size={12} />{lang === 'vi' ? 'Hôm Nay' : 'Today'}
-          </button>
+          <div style={{ display: 'flex', gap: '6px' }}>
+            {/* Export Button */}
+            <button 
+              onClick={handleExport} 
+              title={lang === 'vi' ? 'Xuất Nhật Ký (JSON)' : 'Export Journal (JSON)'}
+              style={{ 
+                padding: '6px 10px', 
+                background: 'rgba(255,255,255,0.03)', 
+                border: '1px solid rgba(255,255,255,0.08)', 
+                color: 'var(--text-secondary)', 
+                borderRadius: 'var(--radius-sm)', 
+                cursor: 'pointer', 
+                fontSize: '0.72rem', 
+                fontWeight: 700, 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '4px',
+                transition: 'all 0.2s'
+              }}
+            >
+              <Download size={12} />
+              {!isMobile && (lang === 'vi' ? 'Xuất File' : 'Export')}
+            </button>
+
+            {/* Import Button */}
+            <label 
+              title={lang === 'vi' ? 'Nhập Nhật Ký (JSON)' : 'Import Journal (JSON)'}
+              style={{ 
+                padding: '6px 10px', 
+                background: 'rgba(255,255,255,0.03)', 
+                border: '1px solid rgba(255,255,255,0.08)', 
+                color: 'var(--text-secondary)', 
+                borderRadius: 'var(--radius-sm)', 
+                cursor: 'pointer', 
+                fontSize: '0.72rem', 
+                fontWeight: 700, 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '4px',
+                transition: 'all 0.2s'
+              }}
+            >
+              <Upload size={12} />
+              {!isMobile && (lang === 'vi' ? 'Nhập File' : 'Import')}
+              <input 
+                type="file" 
+                accept=".json" 
+                onChange={handleImport} 
+                style={{ display: 'none' }} 
+              />
+            </label>
+
+            <button onClick={() => setCurrentDate(new Date())} style={{ padding: '6px 10px', background: 'rgba(0,240,255,0.05)', border: '1px solid rgba(0,240,255,0.25)', color: 'var(--primary)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Calendar size={12} />{lang === 'vi' ? 'Hôm Nay' : 'Today'}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -368,6 +587,7 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
                   const ds = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
                   const dayPnl = getDayPnl(ds);
                   const count = getEntries(ds).length;
+                  const dayActualTradesCount = getEntries(ds).reduce((sum, entry) => sum + (entry.tradesCount || 1), 0);
                   const isToday = ds === todayStr;
                   const isSel = ds === selectedDateStr;
                   const isWeekend = di >= 5;
@@ -392,11 +612,11 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
                         position: 'relative',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        minHeight: isMobile ? '55px' : 'auto'
+                        minHeight: isMobile ? '65px' : '90px'
                       }}>
                       
                       {/* Day number */}
-                      <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div style={{ display: 'flex', width: '100%', justifyContent: 'flex-start', alignItems: 'center' }}>
                         <span style={{
                           width: isMobile ? '20px' : '28px', 
                           height: isMobile ? '20px' : '28px', 
@@ -407,32 +627,44 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
                           boxShadow: isToday ? '0 0 14px rgba(0,240,255,0.7)' : 'none',
                           flexShrink: 0
                         }}>{d}</span>
-                        {count > 0 && !isMobile && (
-                          <div style={{ display: 'flex', gap: '3px', marginTop: '4px' }}>
-                            {Array.from({ length: Math.min(count, 3) }).map((_, i) => (
-                              <div key={i} style={{ width: '5px', height: '5px', borderRadius: '50%', background: dayPnl >= 0 ? 'var(--primary)' : 'var(--pink)', boxShadow: `0 0 4px ${dayPnl >= 0 ? 'var(--primary)' : 'var(--pink)'}` }} />
-                            ))}
-                          </div>
-                        )}
                       </div>
 
-                      {/* PnL display */}
-                      {dayPnl !== 0 && (
+                      {/* PnL display (centered) */}
+                      {dayActualTradesCount > 0 && (
                         <div style={{
-                          marginTop: 'auto',
-                          padding: isMobile ? '1px 2px' : '3px 7px',
-                          borderRadius: '4px',
-                          background: dayPnl > 0 ? 'rgba(0,240,255,0.08)' : 'rgba(244,114,182,0.08)',
-                          border: `1px solid ${dayPnl > 0 ? 'rgba(0,240,255,0.2)' : 'rgba(244,114,182,0.2)'}`,
-                          fontSize: isMobile ? '0.58rem' : '0.78rem', fontWeight: 800, fontFamily: 'var(--font-mono)',
-                          color: dayPnl > 0 ? 'var(--primary)' : 'var(--pink)',
+                          margin: 'auto 0',
+                          fontSize: isMobile ? '0.85rem' : '1.35rem', 
+                          fontWeight: 900, 
+                          fontFamily: 'var(--font-mono)',
+                          color: dayPnl > 0 ? 'var(--primary)' : dayPnl < 0 ? 'var(--pink)' : '#FFF',
                           textAlign: 'center',
                           width: '100%',
                           whiteSpace: 'nowrap',
                           overflow: 'hidden',
-                          textOverflow: 'ellipsis'
+                          textOverflow: 'ellipsis',
+                          textShadow: dayPnl > 0 
+                            ? '0 0 10px rgba(0, 240, 255, 0.35)' 
+                            : dayPnl < 0 
+                              ? '0 0 10px rgba(244, 114, 182, 0.35)' 
+                              : 'none'
                         }}>
-                          {isMobile ? (dayPnl > 0 ? `+$${Math.round(dayPnl/100)/10}k` : `-$${Math.round(Math.abs(dayPnl)/100)/10}k`).replace('.0k', 'k') : fmt(dayPnl)}
+                          {isMobile ? (dayPnl > 0 ? `+$${Math.round(dayPnl/100)/10}k` : dayPnl < 0 ? `-$${Math.round(Math.abs(dayPnl)/100)/10}k` : '$0').replace('.0k', 'k') : fmt(dayPnl)}
+                        </div>
+                      )}
+
+                      {/* Trades count display (at the bottom) */}
+                      {dayActualTradesCount > 0 && (
+                        <div style={{
+                          fontSize: isMobile ? '0.52rem' : '0.65rem',
+                          color: 'var(--text-secondary)',
+                          fontWeight: 700,
+                          textAlign: 'center',
+                          width: '100%',
+                          fontFamily: 'var(--font-mono)',
+                          letterSpacing: '0.02em',
+                          opacity: 0.85
+                        }}>
+                          {dayActualTradesCount} trades
                         </div>
                       )}
                     </div>
@@ -476,7 +708,7 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
       {selectedDateStr && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex' }} onClick={() => setSelectedDateStr(null)}>
           <div style={{ flex: 1, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)' }} />
-          <div onClick={e => e.stopPropagation()} style={{
+          <div onClick={e => e.stopPropagation()} onPaste={handlePaste} style={{
             width: isMobile ? '100%' : '360px',
             maxWidth: '360px',
             background: 'linear-gradient(160deg, #0D1635 0%, #060B19 100%)',
@@ -557,9 +789,90 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
                   }}
                 />
 
+                {/* Drag and Drop / Paste / Upload Area */}
+                {!imagePreview ? (
+                  <label 
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setIsDragOver(true);
+                    }}
+                    onDragLeave={() => setIsDragOver(false)}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setIsDragOver(false);
+                      const file = e.dataTransfer.files?.[0];
+                      if (file) handleImageSelection(file);
+                    }}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '12px',
+                      borderRadius: '8px',
+                      border: isDragOver ? '1.5px dashed var(--primary)' : '1px dashed rgba(0, 240, 255, 0.25)',
+                      background: isDragOver ? 'rgba(0, 240, 255, 0.08)' : 'rgba(0, 0, 0, 0.2)',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      gap: '4px'
+                    }}
+                  >
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleImageSelection(file);
+                      }} 
+                      style={{ display: 'none' }} 
+                    />
+                    <Upload size={16} color={isDragOver ? 'var(--primary)' : 'var(--text-secondary)'} />
+                    <span style={{ fontSize: '0.68rem', color: isDragOver ? '#FFF' : 'var(--text-secondary)', textAlign: 'center' }}>
+                      {lang === 'vi' ? 'Kéo thả ảnh biểu đồ hoặc nhấp để tải lên' : 'Drag & drop chart image or click to upload'}
+                    </span>
+                    <span style={{ fontSize: '0.58rem', color: 'var(--text-muted)' }}>
+                      {lang === 'vi' ? 'Hoặc dán ảnh trực tiếp từ clipboard (Ctrl+V)' : 'Or paste image directly (Ctrl+V)'}
+                    </span>
+                  </label>
+                ) : (
+                  /* Image Preview Area */
+                  <div style={{ position: 'relative', borderRadius: '8px', overflow: 'hidden', border: '1px solid rgba(0, 240, 255, 0.2)', background: 'rgba(0,0,0,0.4)', padding: '4px', display: 'flex', justifyContent: 'center' }}>
+                    <img 
+                      src={imagePreview} 
+                      alt="Uploaded trade chart" 
+                      style={{ maxWidth: '100%', maxHeight: '120px', objectFit: 'contain', borderRadius: '6px' }} 
+                    />
+                    <button 
+                      onClick={() => {
+                        setImagePreview(null);
+                        setImageBase64(null);
+                        setImageMimeType(null);
+                      }}
+                      style={{
+                        position: 'absolute',
+                        top: '8px',
+                        right: '8px',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        borderRadius: '50%',
+                        width: '20px',
+                        height: '20px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#FFF',
+                        cursor: 'pointer',
+                        padding: 0
+                      }}
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                )}
+
                 <button 
                   onClick={handleAiParse} 
-                  disabled={isParsing || !aiText.trim()} 
+                  disabled={isParsing || (!aiText.trim() && !imageBase64)} 
                   style={{
                     background: 'var(--primary-gradient)',
                     border: 'none',
@@ -568,8 +881,8 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
                     borderRadius: '8px',
                     fontWeight: 800,
                     fontSize: '0.75rem',
-                    cursor: (isParsing || !aiText.trim()) ? 'not-allowed' : 'pointer',
-                    opacity: (isParsing || !aiText.trim()) ? 0.6 : 1,
+                    cursor: (isParsing || (!aiText.trim() && !imageBase64)) ? 'not-allowed' : 'pointer',
+                    opacity: (isParsing || (!aiText.trim() && !imageBase64)) ? 0.6 : 1,
                     transition: 'all 0.2s',
                     display: 'flex',
                     alignItems: 'center',
@@ -684,6 +997,52 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
                   />
                 </div>
 
+                {/* Trades Count & Lots Input */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  {/* Trades Count Input */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <label style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontWeight: 800 }}>
+                      {lang === 'vi' ? 'SỐ LƯỢNG LỆNH' : 'TRADES COUNT'}
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="e.g. 1"
+                      value={tradesCount || ''}
+                      onChange={e => setTradesCount(Number(e.target.value))}
+                      style={{
+                        width: '100%', boxSizing: 'border-box',
+                        background: 'rgba(0,0,0,0.3)',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                        color: '#FFF',
+                        padding: '6px 12px', borderRadius: '8px',
+                        fontSize: '0.8rem', outline: 'none', fontWeight: 700
+                      }}
+                    />
+                  </div>
+
+                  {/* Lots Input */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <label style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontWeight: 800 }}>
+                      {lang === 'vi' ? 'SỐ LOT / LỆNH' : 'LOTS PER TRADE'}
+                    </label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      placeholder="e.g. 0.5"
+                      value={lots || ''}
+                      onChange={e => setLots(Number(e.target.value))}
+                      style={{
+                        width: '100%', boxSizing: 'border-box',
+                        background: 'rgba(0,0,0,0.3)',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                        color: '#FFF',
+                        padding: '6px 12px', borderRadius: '8px',
+                        fontSize: '0.8rem', outline: 'none', fontWeight: 700
+                      }}
+                    />
+                  </div>
+                </div>
+
                 {/* Notes Input */}
                 <textarea
                   placeholder={lang === 'vi' ? 'Ghi chú thêm...' : 'Additional notes...'}
@@ -730,7 +1089,7 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
                   borderLeft: `3px solid ${t.pnl >= 0 ? 'var(--primary)' : 'var(--pink)'}`
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                       <span style={{
                         fontSize: '0.62rem', fontWeight: 800,
                         background: t.direction === 'LONG' ? 'rgba(0, 240, 255, 0.12)' : 'rgba(244, 114, 182, 0.12)',
@@ -743,6 +1102,17 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
                       {t.setup && (
                         <span style={{ fontSize: '0.68rem', color: 'var(--text-secondary)', background: 'rgba(255,255,255,0.04)', padding: '2px 5px', borderRadius: '4px' }}>{t.setup}</span>
                       )}
+                      {t.tradesCount && t.tradesCount > 1 && (
+                        <span style={{ fontSize: '0.62rem', color: 'var(--text-secondary)', background: 'rgba(255,255,255,0.04)', padding: '2px 5px', borderRadius: '4px', fontFamily: 'var(--font-mono)' }}>
+                          {t.tradesCount}x
+                        </span>
+                      )}
+                      {t.lots && t.lots > 0 ? (
+                        <span style={{ fontSize: '0.62rem', color: 'var(--text-secondary)', background: 'rgba(255,255,255,0.04)', padding: '2px 5px', borderRadius: '4px', fontFamily: 'var(--font-mono)' }}>
+                          {t.lots} lot
+                          {t.tradesCount && t.tradesCount > 1 ? ` (${Math.round(t.tradesCount * t.lots * 100) / 100} tot)` : ''}
+                        </span>
+                      ) : null}
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <span style={{
