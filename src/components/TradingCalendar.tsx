@@ -159,13 +159,42 @@ export const TradingCalendar: React.FC<TradingCalendarProps> = ({ lang }) => {
       alert(lang === 'vi' ? 'Vui lòng chọn một tệp hình ảnh!' : 'Please select an image file!');
       return;
     }
+
     const reader = new FileReader();
     reader.onload = (e) => {
-      const dataUrl = e.target?.result as string;
-      setImagePreview(dataUrl);
-      setImageMimeType(file.type);
-      const base64Data = dataUrl.split(',')[1];
-      setImageBase64(base64Data);
+      const img = new window.Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 1200;
+        const MAX_HEIGHT = 1200;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+          setImagePreview(compressedDataUrl);
+          setImageMimeType('image/jpeg');
+          const base64Data = compressedDataUrl.split(',')[1];
+          setImageBase64(base64Data);
+        }
+      };
+      img.src = e.target?.result as string;
     };
     reader.readAsDataURL(file);
   };
@@ -248,7 +277,11 @@ Response MUST follow this strict JSON schema (no markdown formatting, no backtic
         })
       });
 
-      if (!res.ok) throw new Error('Gemini request failed');
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        const errMsg = errData.error?.message || `HTTP error ${res.status}`;
+        throw new Error(errMsg);
+      }
       const data = await res.json();
       const jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
       if (jsonText) {
@@ -261,17 +294,18 @@ Response MUST follow this strict JSON schema (no markdown formatting, no backtic
         if (parsed.lots !== undefined) setLots(parsed.lots);
         if (parsed.notes) setNotes(parsed.notes);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Gemini API parse failed:', err);
+      const errMsg = err?.message || err;
       if (hasText) {
         alert(lang === 'vi' 
-          ? 'Không thể phân tích bằng AI. Đang sử dụng bộ phân tích cục bộ.' 
-          : 'Could not parse with AI. Falling back to local parser.');
+          ? `Không thể phân tích bằng AI (${errMsg}). Đang sử dụng bộ phân tích cục bộ.` 
+          : `Could not parse with AI (${errMsg}). Falling back to local parser.`);
         parseLocally(aiText);
       } else {
         alert(lang === 'vi'
-          ? 'Không thể kết nối đến Gemini API hoặc dữ liệu ảnh không hợp lệ.'
-          : 'Failed to connect to Gemini API or invalid image data.');
+          ? `Không thể kết nối đến Gemini API hoặc dữ liệu ảnh không hợp lệ.\nChi tiết: ${errMsg}`
+          : `Failed to connect to Gemini API or invalid image data.\nDetails: ${errMsg}`);
       }
     } finally {
       setIsParsing(false);
